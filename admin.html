@@ -421,7 +421,7 @@
                 padding-top: 30%;
             }
             .container, .video-list-container, .category-list-container {
-                padding: 20px;
+                padding: 10px;
                 margin-top: 20px;
                 margin-bottom: 20px;
             }
@@ -478,7 +478,7 @@
 
     <div id="admin-content">
         <div class="container">
-            <a href="web.html" style="text-decoration: none; color: inherit;"><h1 id="video-form-title">Add New Video Content</h1></a>
+            <h1 id="video-form-title">Add New Video Content</h1>
             <form id="video-form">
                 <div class="form-group">
                     <label for="videoTitle">Video Title:</label>
@@ -489,8 +489,8 @@
                     <input type="text" id="thumbnailUrl" required placeholder="e.g., https://example.com/thumb.jpg">
                 </div>
                 <div class="form-group">
-                    <label for="videoUrl">Video Play URL (e.g., XXX video link):</label>
-                    <input type="text" id="videoUrl" required placeholder="e.e.g., https://www.xxx.com/watch?v=dQw4w9WgXcQ">
+                    <label for="videoUrl">Video Play URL (e.g., YouTube video link):</label>
+                    <input type="text" id="videoUrl" required placeholder="e.e.g., https://www.youtube.com/watch?v=dQw4w9WgXcQ">
                 </div>
                 <div class="form-group">
                     <label for="videoDuration">Duration (e.g., 22:15):</label>
@@ -1016,19 +1016,61 @@
 
                 let categories = [];
                 querySnapshot.forEach((doc) => {
-                    categories.push({ id: doc.id, name: doc.data().name });
+                    categories.push({ id: doc.id, ...doc.data() }); // Include full data for potential future use
                 });
+
                 categories.sort((a, b) => a.name.localeCompare(b.name));
 
-                categories.forEach(category => {
-                    const option = document.createElement('option');
-                    option.value = category.name.toLowerCase();
-                    option.textContent = category.name;
-                    videoCategorySelect.appendChild(option);
+                // Display categories in the "Manage Existing Categories" section
+                categories.forEach((category) => {
+                    const categoryItem = document.createElement('div');
+                    categoryItem.classList.add('category-item');
+                    categoryItem.setAttribute('data-category-id', category.id);
+                    categoryItem.innerHTML = `
+                        <img src="${category.thumbnail}" alt="Category Thumbnail" onerror="this.onerror=null; this.src='https://placehold.co/80x50/0f0c1d/ffffff?text=No+Image'">
+                        <div class="category-details">
+                            <h3>${category.name}</h3>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="edit-btn" data-id="${category.id}" data-name="${category.name}" data-thumbnail="${category.thumbnail}"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="delete-btn" data-id="${category.id}"><i class="fas fa-trash"></i> Delete</button>
+                        </div>
+                    `;
+                    adminCategoryList.appendChild(categoryItem);
                 });
+
+                adminCategoryList.querySelectorAll('.delete-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const categoryIdToDelete = e.currentTarget.getAttribute('data-id');
+                        showCustomPrompt(`Are you sure you want to delete "${e.currentTarget.closest('.category-item').querySelector('h3').textContent}"? This action cannot be undone.`, (response) => {
+                            if (response) {
+                                deleteCategory(categoryIdToDelete);
+                            }
+                        });
+                    });
+                });
+
+                adminCategoryList.querySelectorAll('.edit-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        editingCategoryId = e.currentTarget.getAttribute('data-id');
+                        document.getElementById('categoryName').value = e.currentTarget.getAttribute('data-name');
+                        document.getElementById('categoryThumbnailUrl').value = e.currentTarget.getAttribute('data-thumbnail');
+                        
+                        categoryFormTitle.textContent = 'Edit Category';
+                        categorySubmitBtn.innerHTML = '<i class="fas fa-save"></i> Update Category';
+                        cancelCategoryEditBtn.style.display = 'inline-block';
+                        showMessage("Editing category: " + e.currentTarget.getAttribute('data-name'));
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    });
+                });
+
             } catch (error) {
-                console.error("Error populating categories dropdown: ", error);
-                showMessage("Error loading categories for dropdown.", 'error');
+                console.error("Error fetching admin categories: ", error);
+                adminCategoryList.innerHTML = `
+                    <div class="no-categories-message" style="color: #dc3545;">
+                        <i class="fas fa-exclamation-circle"></i> Error loading categories.
+                    </div>
+                `;
             }
         }
 
@@ -1038,7 +1080,7 @@
                 showMessage("Category deleted successfully!");
                 console.log("Category successfully deleted with ID:", categoryId);
                 fetchAndDisplayAdminCategories();
-                populateCategoryDropdown();
+                populateCategoryDropdown(); // Re-populate dropdown after deletion
             } catch (error) {
                 console.error("Error deleting category: ", error);
                 showMessage("Error deleting category: " + error.message, 'error');
@@ -1046,7 +1088,7 @@
         }
 
         async function populateCategoryDropdown() {
-            videoCategorySelect.innerHTML = '<option value="">-- Select a Category --</option>';
+            videoCategorySelect.innerHTML = '<option value="">-- Select a Category --</option>'; // Clear existing options
             try {
                 const categoriesRef = collection(db, 'categories');
                 const querySnapshot = await getDocs(categoriesRef);
