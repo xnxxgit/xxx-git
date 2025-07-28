@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XXX Git - Adult Video Streaming</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --neon-pink: #a020f0; 
+            --neon-purple: #8a2be2; 
+            --dark-bg: #0d0a1b; 
+            --darker-bg: #080610; 
+            --card-bg: #151125; 
+            --text: #ffffff;
+            --text-secondary: #c0c3d5; 
+            --warning: #ff5722;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--darker-bg), var(--dark-bg));
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: rgba(8, 6, 16, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.2rem 5%;
+            display: flex;
+            flex-direction: column; 
+            gap: 1rem; 
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            border-bottom: 1px solid rgba(138, 43, 226, 0.2);
+        }
+
+        .header-top-row { 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%; 
+        }
+
+        .logo {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--text);
+            text-decoration: none;
+            text-shadow:
+                0 0 15px var(--neon-pink),
+                0 0 30px var(--neon-purple),
+                0 0 45px rgba(138, 43, 226, 0.8),
+                0 0 60px rgba(160, 32, 240, 0.6);
+            letter-spacing: 1.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            color: var(--neon-pink);
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px var(--neon-pink);
+        }
+
+        .warning-badge {
+            background-color: red;
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            margin-left: 0.5rem;
+            vertical-align: super;
+        }
+
+        .header-right { 
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .search-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 100%; 
+            justify-content: flex-end; 
+        }
+
+        .search-input {
+            background: var(--card-bg);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            border-radius: 20px;
+            padding: 0.7rem 1.2rem;
+            padding-right: 2.8rem;
+            color: var(--text);
+            font-size: 1rem;
+            width: 0; 
+            opacity: 0;
+            visibility: hidden;
+            transition: width 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+            box-shadow: 0 0 10px rgba(160, 32, 240, 0.2);
+        }
+
+        .search-input.active {
+            width: calc(100% - 40px); 
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .search-btn {
+            background: transparent;
+            border: none;
+            color: var(--text);
+            cursor: pointer;
+            font-size: 1.4rem;
+            transition: all 0.3s;
+            position: absolute;
+            right: 10px;
+            z-index: 1;
+        }
+
+        .search-btn:hover {
+            color: var(--neon-pink);
+            transform: scale(1.1);
+        }
+
+        .search-input.active + .search-btn {
+            color: var(--neon-pink);
+        }
+
+        .profile-container {
+            position: relative;
+        }
+
+        .profile-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--neon-pink), var(--neon-purple));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
+        }
+
+        .profile-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px var(--neon-pink);
+        }
+
+        .profile-btn img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 55px;
+            right: 0;
+            background: var(--card-bg);
+            border-radius: 8px;
+            width: 220px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            z-index: 10;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .dropdown.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.95rem;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(138, 43, 226, 0.1);
+        }
+
+        .dropdown-item i {
+            width: 24px;
+            text-align: center;
+            color: var(--neon-pink);
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: space-around;
+            padding: 1.5rem 5%;
+            background: rgba(8, 6, 16, 0.7);
+            border-bottom: 1px solid rgba(138, 43, 226, 0.1);
+        }
+
+        .tab {
+            flex-grow: 1;
+            padding: 0.8rem 1rem;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .tab i {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            transition: color 0.3s;
+        }
+
+        .tab.active, .tab:hover {
+            color: var(--text);
+            background: rgba(138, 43, 226, 0.15);
+        }
+
+        .tab.active i, .tab:hover i {
+            color: var(--neon-pink);
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 3px;
+            background: var(--neon-pink);
+            border-radius: 10px;
+            box-shadow: 0 0 10px var(--neon-pink);
+        }
+
+        .categories-section {
+            padding: 3rem 5%;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            margin-top: -30px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, var(--neon-pink), transparent);
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .category-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            border: 1px solid rgba(138, 43, 226, 0.1);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            width: 100%;
+            padding-top: 50%; 
+            position: relative; 
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 0 0 2px var(--neon-pink);
+        }
+
+        .category-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; 
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .category-card:hover .category-image {
+            opacity: 0.9;
+        }
+
+        .category-name {
+            position: absolute; 
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 1rem;
+            font-weight: 600;
+            font-size: 1.2rem;
+            z-index: 2;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            text-align: center; 
+        }
+
+        .video-section {
+            padding: 3rem 5%;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .video-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            border: 1px solid rgba(138, 43, 226, 0.1);
+            cursor: pointer;
+        }
+
+        .video-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 0 0 2px var(--neon-pink);
+        }
+
+        .video-thumb {
+            width: 100%;
+            padding-top: 56.25%; 
+            position: relative; 
+            overflow: hidden;
+        }
+
+        .video-thumb img {
+            position: absolute; 
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; 
+            transition: transform 0.5s;
+        }
+
+        .video-card:hover .video-thumb img {
+            transform: scale(1.1);
+        }
+
+        .video-duration {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            z-index: 2;
+        }
+
+        .play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            background: rgba(160, 32, 240, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .video-card:hover .play-btn {
+            opacity: 1;
+        }
+
+        .play-btn i {
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .video-info {
+            padding: 1.2rem;
+        }
+
+        .video-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            height: 3.2rem;
+            line-height: 1.4;
+        }
+
+        .video-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .video-views {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .video-likes {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: var(--neon-pink);
+        }
+
+        footer {
+            background: var(--darker-bg);
+            padding: 2rem 5%;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(138, 43, 226, 0.1);
+        }
+
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text);
+            text-shadow:
+                0 0 10px var(--neon-pink),
+                0 0 20px var(--neon-pink);
+        }
+
+        .copyright {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .disclaimer {
+            background: rgba(255, 87, 34, 0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 1024px) {
+            .video-grid, .categories-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 1.8rem;
+            }
+            
+            header {
+                padding: 1rem 3%; 
+                gap: 0.8rem;
+            }
+            
+            .tabs {
+                justify-content: space-around;
+                padding: 1rem 3%; 
+            }
+            
+            .tab {
+                padding: 0.7rem 0.5rem;
+                font-size: 0.9rem;
+                flex-shrink: 1;
+                gap: 0.3rem;
+            }
+
+            .tab i {
+                font-size: 0.9rem;
+            }
+            
+            .video-grid, .categories-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 1.5rem;
+            }
+            
+            .search-input.active {
+                width: calc(100% - 40px); 
+            }
+        }
+
+        @media (max-width: 576px) {
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            .header-right {
+                gap: 1rem;
+            }
+
+            .category-card {
+                padding-top: 45%; 
+            }
+            
+            .video-grid, .categories-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .age-gate-content {
+                padding: 2rem 1.5rem;
+            }
+            
+            .age-buttons {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .age-btn {
+                width: 100%;
+            }
+
+            .tab {
+                font-size: 0.8rem;
+                padding: 0.6rem 0.2rem;
+                gap: 0.2rem;
+            }
+
+            .tab i {
+                font-size: 0.8rem;
+            }
+        }
+
+        .custom-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .custom-box {
+            background-color: var(--card-bg);
+            color: var(--text);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            border: 1px solid var(--neon-pink);
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .custom-box p {
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .custom-box button {
+            background-color: var(--neon-pink);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: 600;
+        }
+
+        .custom-box button:hover {
+            background-color: #d81b60;
+        }
+
+        .custom-prompt-buttons {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .custom-prompt-buttons button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 5px;
+        }
+
+        .custom-prompt-buttons .no-btn {
+            background-color: #555;
+        }
+
+        .custom-prompt-buttons .no-btn:hover {
+            background-color: #777;
+        }
+
+        .heart-animation-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+            z-index: 5;
+            display: none;
+        }
+
+        .animated-heart {
+            font-size: 5rem;
+            color: var(--neon-pink);
+            opacity: 0;
+            transform: scale(0);
+            filter: drop-shadow(0 0 15px var(--neon-pink));
+        }
+
+        .animated-heart.animate-heart {
+            animation: heartPopFade 0.7s ease-out forwards;
+        }
+
+        @keyframes heartPopFade {
+            0% {
+                opacity: 0;
+                transform: scale(0);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-top-row">
+            <div class="logo">
+                <a href="admin.html" style="text-decoration: none; color: inherit;"> <i class="fas fa-fire"></i> XXX Git </a>
+                <span class="warning-badge">18+</span>
+            </div>
+            <div class="profile-container">
+                <div class="profile-btn" id="profile-btn">
+                    <i class="fas fa-user" id="profile-icon"></i>
+                </div>
+                <div class="dropdown">
+                    <div class="dropdown-item" id="user-display-info" style="display: none;">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="current-user-name"></span>
+                    </div>
+                    <div class="dropdown-item" id="google-login">
+                        <i class="fab fa-google"></i>
+                        <span>Log in with Google</span>
+                    </div>
+                    <div class="dropdown-item" id="guest-login">
+                        <i class="fas fa-user-clock"></i>
+                        <span>Log in with Guest Account</span>
+                    </div>
+                    <div class="dropdown-item" id="logout-button" style="display: none;">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="search-container">
+            <input type="text" class="search-input" id="search-input" placeholder="Search videos or categories...">
+            <button class="search-btn" id="search-toggle-btn">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="tabs">
+        <button class="tab active" data-tab="home"><i class="fas fa-home"></i> Home</button>
+        <button class="tab" data-tab="categories"><i class="fas fa-tags"></i> Categories</button>
+        <button class="tab" data-tab="favourite"><i class="fas fa-heart"></i> Favourite</button>
+        <button class="tab" data-tab="premium"><i class="fas fa-crown"></i> Premium</button>
+    </div>
+
+    <section class="categories-section" id="categories-content" style="display:none;">
+        <h2 class="section-title">Categories</h2>
+        <div class="categories-grid" id="dynamic-categories-grid">
+            <div class="placeholder-message" id="loading-categories">
+                <i class="fas fa-spinner fa-spin" style="font-size: 4rem; color: var(--neon-pink); margin-bottom: 1rem;"></i>
+                <h3>Loading Categories...</h3>
+                <p>Please wait while we fetch the categories.</p>
+            </div>
+             <div class="placeholder-message" id="no-categories" style="display:none;">
+                <i class="fas fa-tags" style="font-size: 4rem; color: var(--neon-pink); margin-bottom: 1rem;"></i>
+                <h3>No categories added yet.</h3>
+                <p>Visit the admin panel to add some categories.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="video-section" id="home-content">
+        <h2 class="section-title" id="video-section-title">Featured Videos</h2>
+        <div class="video-grid" id="public-video-grid">
+            <div class="placeholder-message" id="loading-public-videos">
+                <i class="fas fa-spinner fa-spin" style="font-size: 4rem; color: var(--neon-pink); margin-bottom: 1rem;"></i>
+                <h3>Loading Videos...</h3>
+                <p>Please wait while we fetch the latest content.</p>
+            </div>
+             <div class="placeholder-message" id="no-public-videos" style="display:none;">
+                <i class="fas fa-video-slash" style="font-size: 4rem; color: var(--neon-pink); margin-bottom: 1rem;"></i>
+                <h3>No videos available yet</h3>
+                <p>Check back later or add some from the admin panel!</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="video-section" id="favourite-content" style="display:none;">
+        <h2 class="section-title">Favourites</h2>
+        <div class="video-grid" id="favourite-video-grid">
+            <div class="placeholder-message" id="no-favourite-videos">
+                <i class="fas fa-heart-broken" style="font-size: 4rem; color: var(--neon-pink); margin-bottom: 1rem;"></i>
+                <h3>No favourites yet</h3>
+                <p>Add videos to your favourites to see them here</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="video-section" id="premium-content" style="display:none;">
+        <h2 class="section-title">Premium Content</h2>
+        <div class="video-grid">
+            <div class="placeholder-message">
+                <i class="fas fa-crown" style="font-size: 4rem; color: var(--neon-pink); margin-bottom: 1rem;"></i>
+                <h3>Premium Membership Required</h3>
+                <p>Upgrade to premium to access exclusive content</p>
+                <button class="action-btn" style="margin-top: 1.5rem; background: var(--neon-pink);">
+                    <i class="fas fa-gem"></i> Upgrade Now
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-logo">XXX Git</div>
+        <div class="copyright">
+            © 2023 XXX Git. All rights reserved.
+            <div class="disclaimer">
+                <strong>Disclaimer:</strong> XXX Git is an adult content aggregator that embeds videos from external sources. 
+                We do not host, produce, or own any of the videos displayed on this site. 
+                All videos are the property of their respective owners. This site is intended for adults aged 18 and over.
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, setDoc, updateDoc, getDocs, query, where, increment, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAsZ-nw5UgKRotI2_Kgb9V-BFXS3JoX7UU",
+            authDomain: "xxx-git.firebaseapp.com",
+            projectId: "xxx-git",
+            storageBucket: "xxx-git.firebasestorage.app",
+            messagingSenderId: "1097384679265",
+            appId: "1:1097384679265:web:3969c888f193b42f8bd720",
+            measurementId: "G-TFJW56LFKV"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        console.log("Firebase Config:", firebaseConfig);
+
+        (async () => {
+            try {
+                await signInAnonymously(auth);
+                console.log("Signed in anonymously for user's app. Current user:", auth.currentUser); 
+            } catch (error) {
+                console.error("Failed to sign in anonymously for user's app:", error);
+            }
+        })();
+
+        const profileBtn = document.getElementById('profile-btn');
+        const profileIcon = document.getElementById('profile-icon');
+        const dropdown = document.querySelector('.dropdown');
+        
+        profileBtn.addEventListener('click', () => {
+            dropdown.classList.toggle('active');
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (!profileBtn.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.classList.remove('active');
+            }
+        });
+        
+        const tabs = document.querySelectorAll('.tab');
+        const contents = {
+            home: document.getElementById('home-content'),
+            categories: document.getElementById('categories-content'),
+            favourite: document.getElementById('favourite-content'),
+            premium: document.getElementById('premium-content')
+        };
+        const videoSectionTitle = document.getElementById('video-section-title');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                
+                Object.values(contents).forEach(content => {
+                    content.style.display = 'none';
+                });
+                
+                tab.classList.add('active');
+                
+                const tabName = tab.getAttribute('data-tab');
+                contents[tabName].style.display = 'block';
+
+                if (tabName === 'home') {
+                    videoSectionTitle.textContent = 'Featured Videos';
+                    fetchPublicVideos();
+                } else if (tabName === 'categories') {
+                    fetchCategories();
+                } else if (tabName === 'favourite') {
+                    const user = auth.currentUser;
+                    if (user) {
+                        fetchUserFavorites(user.uid);
+                    } else {
+                        displayNoFavoritesMessage("Please log in to see your favourites.");
+                    }
+                }
+                searchInput.value = '';
+                searchInput.classList.remove('active');
+            });
+        });
+        
+        document.getElementById('google-login').addEventListener('click', () => {
+            const provider = new GoogleAuthProvider();
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    console.log("Google Login Successful:", result.user);
+                    showCustomMessage(`Logged in as: ${result.user.displayName || result.user.email}`);
+                    dropdown.classList.remove('active');
+                    localStorage.setItem('hasGoogleLoggedIn', 'true'); 
+                })
+                .catch((error) => {
+                    const errorMessage = error.message;
+                    console.error("Google Login Error:", errorMessage);
+                    showCustomMessage(`Google login failed: ${errorMessage}`);
+                });
+        });
+        
+        document.getElementById('guest-login').addEventListener('click', () => {
+            signInAnonymously(auth)
+                .then(() => {
+                    console.log("Guest Login Successful:", auth.currentUser);
+                    showCustomMessage('Logged in as Guest');
+                    dropdown.classList.remove('active');
+                })
+                .catch((error) => {
+                    const errorMessage = error.message;
+                    console.error("Guest Login Error:", errorMessage);
+                    showCustomMessage(`Guest login failed: ${errorMessage}`);
+                });
+        });
+
+        document.getElementById('logout-button').addEventListener('click', () => {
+            auth.signOut().then(() => {
+                showCustomMessage("Logged out successfully.");
+                dropdown.classList.remove('active');
+                localStorage.removeItem('hasGoogleLoggedIn'); 
+            }).catch((error) => {
+                console.error("Logout Error:", error);
+                showCustomMessage("Logout failed. Please try again.");
+            });
+        });
+        
+        const searchToggleBtn = document.getElementById('search-toggle-btn');
+        const searchInput = document.getElementById('search-input');
+        let allVideos = []; 
+        let allCategories = []; 
+
+        searchToggleBtn.addEventListener('click', () => {
+            searchInput.classList.toggle('active');
+            if (searchInput.classList.contains('active')) {
+                searchInput.focus();
+            } else {
+                searchInput.value = ''; 
+                const currentActiveTab = document.querySelector('.tab.active').getAttribute('data-tab');
+                if (currentActiveTab === 'home') {
+                    fetchPublicVideos();
+                } else if (currentActiveTab === 'categories') {
+                    fetchCategories();
+                } else if (currentActiveTab === 'favourite') { 
+                    const user = auth.currentUser;
+                    if (user) {
+                        fetchUserFavorites(user.uid);
+                    } else {
+                        displayNoFavoritesMessage("Please log in to see your favourites.");
+                    }
+                }
+            }
+        });
+
+        searchInput.addEventListener('input', () => {
+            const query = searchInput.value.toLowerCase().trim();
+            filterContent(query);
+        });
+
+        function filterContent(query) {
+            const currentActiveTab = document.querySelector('.tab.active').getAttribute('data-tab');
+
+            if (currentActiveTab === 'home') {
+                displayFilteredVideos(query, publicVideoGrid, allVideos, noPublicVideosMessage);
+            } else if (currentActiveTab === 'categories') {
+                displayFilteredCategories(query);
+            } else if (currentActiveTab === 'favourite') {
+                const user = auth.currentUser;
+                if (user) {
+                    const favouriteVideoGrid = document.getElementById('favourite-video-grid');
+                    const noFavouriteVideosMessage = document.getElementById('no-favourite-videos');
+                    getDocs(collection(db, 'users', user.uid, 'favorites')).then(querySnapshot => {
+                        const favVideos = [];
+                        querySnapshot.forEach(doc => favVideos.push({ id: doc.id, ...doc.data() }));
+                        displayFilteredVideos(query, favouriteVideoGrid, favVideos, noFavouriteVideosMessage, "No favourites found for");
+                    }).catch(error => {
+                        console.error("Error fetching favorites for search:", error);
+                        displayNoFavoritesMessage("Error searching favourites.");
+                    });
+                } else {
+                    displayNoFavoritesMessage("Please log in to search your favourites.");
+                }
+            }
+        }
+
+        function displayFilteredVideos(query, targetGrid, videoList, noResultMessageElement, noResultText = "No videos found for") {
+            const filteredVideos = videoList.filter(video => 
+                video.title.toLowerCase().includes(query) ||
+                (video.description && video.description.toLowerCase().includes(query)) ||
+                (video.category && video.category.toLowerCase().includes(query))
+            );
+
+            targetGrid.innerHTML = '';
+            if (filteredVideos.length === 0) {
+                noResultMessageElement.style.display = 'block';
+                noResultMessageElement.innerHTML = `
+                    <i class="fas fa-video-slash" style="font-size: 4rem; color: var(--neon-pink); margin-bottom: 1rem;"></i>
+                    <h3>${noResultText} "${query}"</h3>
+                    <p>Try a different search term.</p>
+                `;
+            } else {
+                noResultMessageElement.style.display = 'none';
+                filteredVideos.forEach(video => {
+                    targetGrid.appendChild(createVideoCardElement(video));
+                });
+            }
+        }
+
+
+        function displayFilteredCategories(query) {
+            const filteredCategories = allCategories.filter(category => 
+                category.name.toLowerCase().includes(query)
+            );
+
+            dynamicCategoriesGrid.innerHTML = '';
+            if (filteredCategories.length === 0) {
+                noCategoriesMessage.style.display = 'block';
+                noCategoriesMessage.innerHTML = `
+                    <i class="fas fa-tags" style="font-size: 4rem; color: var(--neon-pink); margin-bottom: 1rem;"></i>
+                    <h3>No categories found for "${query}"</h3>
+                    <p>Try a different search term.</p>
+                `;
+            } else {
+                noCategoriesMessage.style.display = 'none';
+                filteredCategories.forEach(category => {
+                    const categoryCard = createCategoryCardElement(category); 
+                    dynamicCategoriesGrid.appendChild(categoryCard);
+                });
+            }
+        }
+
+        function showCustomMessage(message) {
+            const overlay = document.createElement('div');
+            overlay.classList.add('custom-overlay');
+            overlay.innerHTML = `
+                <div class="custom-box">
+                    <p>${message}</p>
+                    <button>OK</button>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+            overlay.querySelector('button').addEventListener('click', () => {
+                document.body.removeChild(overlay);
+            });
+        }
+
+        function showCustomPrompt(message, callback) {
+            const overlay = document.createElement('div');
+            overlay.classList.add('custom-overlay');
+            overlay.innerHTML = `
+                <div class="custom-box">
+                    <p>${message}</p>
+                    <div class="custom-prompt-buttons">
+                        <button class="yes-btn">Yes</button>
+                        <button class="no-btn">No</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+
+            const yesBtn = overlay.querySelector('.yes-btn');
+            const noBtn = overlay.querySelector('.no-btn');
+
+            yesBtn.addEventListener('click', () => {
+                document.body.removeChild(overlay);
+                callback(true);
+            });
+
+            noBtn.addEventListener('click', () => {
+                document.body.removeChild(overlay);
+                callback(false);
+            });
+        }
+
+        function parseMetricString(metricString) {
+            if (typeof metricString !== 'string') return metricString;
+            const value = parseFloat(metricString);
+            if (metricString.includes('K')) {
+                return value * 1000;
+            } else if (metricString.includes('M')) {
+                return value * 1000000;
+            }
+            return value;
+        }
+
+        function formatMetricNumber(num) {
+            if (typeof num !== 'number') { 
+                num = parseFloat(num);
+                if (isNaN(num)) return '0'; 
+            }
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            }
+            if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toString();
+        }
+
+        async function incrementVideoMetric(videoId, metricType) {
+            try {
+                const videoRef = doc(db, "public_videos", videoId);
+                await updateDoc(videoRef, {
+                    [metricType]: increment(1)
+                });
+                console.log(`${metricType} incremented for video ${videoId}`);
+                
+                const updatedVideoIndex = allVideos.findIndex(v => v.id === videoId);
+                if (updatedVideoIndex !== -1) {
+                    const currentMetricValue = parseMetricString(allVideos[updatedVideoIndex][metricType]);
+                    allVideos[updatedVideoIndex][metricType] = formatMetricNumber(currentMetricValue + 1);
+                }
+
+                const currentActiveTab = document.querySelector('.tab.active').getAttribute('data-tab');
+                if (currentActiveTab === 'home') {
+                    const query = searchInput.value.toLowerCase().trim();
+                    if (query) {
+                        displayFilteredVideos(query, publicVideoGrid, allVideos, noPublicVideosMessage);
+                    } else {
+                        fetchPublicVideos(false); 
+                    }
+                } else if (currentActiveTab === 'categories') {
+                    const currentCategory = videoSectionTitle.textContent;
+                    if (currentCategory && currentCategory !== 'Featured Videos') {
+                         fetchVideosByCategory(currentCategory, false);
+                    } else {
+                        const query = searchInput.value.toLowerCase().trim();
+                        if (query) {
+                            displayFilteredVideos(query, publicVideoGrid, allVideos, noPublicVideosMessage); 
+                        } else {
+                            fetchPublicVideos(false); 
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error(`Error incrementing ${metricType}:`, error);
+                showCustomMessage(`Failed to update ${metricType}.`);
+            }
+        }
+
+        async function addVideoToFavorites(videoDetails) {
+            const user = auth.currentUser;
+            if (!user) {
+                showCustomMessage("Please log in to add favorites.");
+                return;
+            }
+
+            const userFavoritesRef = collection(db, 'users', user.uid, 'favorites');
+            const docId = videoDetails.id; 
+
+            try {
+                const favDocRef = doc(userFavoritesRef, docId);
+                const existingFavDoc = await getDocs(query(userFavoritesRef, where('id', '==', docId)));
+                if (!existingFavDoc.empty) {
+                    showCustomMessage("This video is already in your favorites!");
+                    return;
+                }
+
+                await setDoc(favDocRef, {
+                    id: videoDetails.id,
+                    title: videoDetails.title,
+                    thumbnail: videoDetails.thumbnail,
+                    duration: videoDetails.duration,
+                    views: videoDetails.views || "0", 
+                    likes: videoDetails.likes || "0", 
+                    url: videoDetails.url, 
+                    description: videoDetails.description,
+                    category: videoDetails.category || 'N/A', 
+                    timestamp: serverTimestamp() 
+                });
+                showCustomMessage("Video added to favorites! ❤️");
+                console.log("Document successfully written!");
+
+                const favouriteTab = document.querySelector('.tab[data-tab="favourite"]');
+                if (favouriteTab.classList.contains('active') && user) {
+                    fetchUserFavorites(user.uid);
+                }
+
+            } catch (error) {
+                console.error("Error writing document: ", error);
+                showCustomMessage("Failed to add to favorites. Please try again.");
+            }
+        }
+
+        const favouriteVideoGrid = document.getElementById('favourite-video-grid');
+        const noFavouriteVideosMessage = document.getElementById('no-favourite-videos');
+
+        async function fetchUserFavorites(userId) {
+            favouriteVideoGrid.innerHTML = ''; 
+            noFavouriteVideosMessage.style.display = 'none'; 
+
+            if (!userId) {
+                displayNoFavoritesMessage("Please log in to see your favourites.");
+                return;
+            }
+
+            const userFavoritesRef = collection(db, 'users', userId, 'favorites');
+            try {
+                const querySnapshot = await getDocs(userFavoritesRef); 
+
+                if (querySnapshot.empty) {
+                    displayNoFavoritesMessage("No favourites yet");
+                    return;
+                }
+
+                let favVideos = [];
+                querySnapshot.forEach((doc) => {
+                    favVideos.push({ id: doc.id, ...doc.data() }); 
+                });
+
+                favVideos.sort((a, b) => {
+                    const dateA = a.timestamp ? a.timestamp.toDate() : new Date(0);
+                    const dateB = b.timestamp ? b.timestamp.toDate() : new Date(0);
+                    return dateB - dateA; 
+                });
+
+                favVideos.forEach((favVideo) => {
+                    const videoCard = createVideoCardElement(favVideo); 
+                    favouriteVideoGrid.appendChild(videoCard);
+                });
+            } catch (error) {
+                console.error("Error getting favorites: ", error);
+                displayNoFavoritesMessage("Error loading favorites.");
+            }
+        }
+
+        const publicVideoGrid = document.getElementById('public-video-grid');
+        const loadingPublicVideos = document.getElementById('loading-public-videos');
+        const noPublicVideosMessage = document.getElementById('no-public-videos');
+
+        async function fetchPublicVideos(clearAndLoad = true) {
+            if (clearAndLoad) {
+                publicVideoGrid.innerHTML = '';
+                loadingPublicVideos.style.display = 'flex';
+                noPublicVideosMessage.style.display = 'none';
+            }
+
+            try {
+                const publicVideosRef = collection(db, 'public_videos');
+                const q = query(publicVideosRef);
+                const querySnapshot = await getDocs(q); 
+
+                loadingPublicVideos.style.display = 'none';
+
+                if (querySnapshot.empty) {
+                    noPublicVideosMessage.style.display = 'block'; 
+                    return;
+                }
+
+                let videos = [];
+                querySnapshot.forEach((doc) => {
+                    videos.push({ id: doc.id, ...doc.data() });
+                });
+
+                videos.sort((a, b) => {
+                    const dateA = a.createdAt ? a.createdAt.toDate() : new Date(0); 
+                    const dateB = b.createdAt ? b.createdAt.toDate() : new Date(0);
+                    return dateB - dateA;
+                });
+
+                allVideos = videos; 
+
+                if (clearAndLoad) {
+                    publicVideoGrid.innerHTML = ''; 
+                    videos.forEach((video) => {
+                        const videoCard = createVideoCardElement(video);
+                        publicVideoGrid.appendChild(videoCard);
+                    });
+                } else {
+                    const currentQuery = searchInput.value.toLowerCase().trim();
+                    if (!currentQuery) { 
+                        publicVideoGrid.innerHTML = '';
+                        videos.forEach((video) => {
+                            const videoCard = createVideoCardElement(video);
+                            publicVideoGrid.appendChild(videoCard);
+                        });
+                    }
+                }
+
+            } catch (error) {
+                console.error("Error fetching public videos: ", error);
+                loadingPublicVideos.style.display = 'none';
+                noPublicVideosMessage.style.display = 'block';
+                noPublicVideosMessage.innerHTML = `
+                    <i class="fas fa-exclamation-circle" style="font-size: 4rem; color: var(--warning); margin-bottom: 1rem;"></i>
+                    <h3>Error loading videos</h3>
+                    <p>Please try again later.</p>
+                `;
+            }
+        }
+
+        async function fetchVideosByCategory(categoryName, clearAndLoad = true) {
+            if (clearAndLoad) {
+                publicVideoGrid.innerHTML = ''; 
+                loadingPublicVideos.style.display = 'flex';
+                noPublicVideosMessage.style.display = 'none';
+            }
+            videoSectionTitle.textContent = categoryName;
+
+            try {
+                const publicVideosRef = collection(db, 'public_videos');
+                const q = query(publicVideosRef, where('category', '==', categoryName.toLowerCase()));
+                const querySnapshot = await getDocs(q);
+
+                loadingPublicVideos.style.display = 'none';
+
+                if (querySnapshot.empty) {
+                    noPublicVideosMessage.style.display = 'block';
+                    noPublicVideosMessage.innerHTML = `
+                        <i class="fas fa-video-slash" style="font-size: 4rem; color: var(--neon-pink); margin-bottom: 1rem;"></i>
+                        <h3>No videos found for "${categoryName}" category yet.</h3>
+                        <p>Check back later or add some in the admin panel.</p>
+                    `;
+                    return;
+                }
+
+                let videos = [];
+                querySnapshot.forEach((doc) => {
+                    videos.push({ id: doc.id, ...doc.data() });
+                });
+
+                videos.sort((a, b) => {
+                    const dateA = a.createdAt ? a.createdAt.toDate() : new Date(0);
+                    const dateB = b.createdAt ? b.createdAt.toDate() : new Date(0);
+                    return dateB - dateA; 
+                });
+
+                allVideos = videos; 
+
+                if (clearAndLoad) {
+                    publicVideoGrid.innerHTML = ''; 
+                    videos.forEach((video) => {
+                        const videoCard = createVideoCardElement(video);
+                        publicVideoGrid.appendChild(videoCard);
+                    });
+                } else {
+                     const currentQuery = searchInput.value.toLowerCase().trim();
+                    if (!currentQuery) {
+                        publicVideoGrid.innerHTML = '';
+                        videos.forEach((video) => {
+                            const videoCard = createVideoCardElement(video);
+                            publicVideoGrid.appendChild(videoCard);
+                        });
+                    }
+                }
+
+
+            } catch (error) {
+                console.error("Error fetching videos by category: ", error);
+                loadingPublicVideos.style.display = 'none';
+                noPublicVideosMessage.style.display = 'block';
+                noPublicVideosMessage.innerHTML = `
+                    <i class="fas fa-exclamation-circle" style="font-size: 4rem; color: var(--warning); margin-bottom: 1rem;"></i>
+                    <h3>Error loading videos for "${categoryName}".</h3>
+                    <p>Please try again later.</p>
+                `;
+            }
+        }
+
+        const dynamicCategoriesGrid = document.getElementById('dynamic-categories-grid');
+        const loadingCategories = document.getElementById('loading-categories');
+        const noCategoriesMessage = document.getElementById('no-categories');
+
+        async function fetchCategories(clearAndLoad = true) {
+            if (clearAndLoad) {
+                dynamicCategoriesGrid.innerHTML = '';
+                dynamicCategoriesGrid.appendChild(loadingCategories);
+                loadingCategories.style.display = 'flex';
+                noCategoriesMessage.style.display = 'none';
+            }
+
+            try {
+                const categoriesRef = collection(db, 'categories');
+                const querySnapshot = await getDocs(categoriesRef);
+
+                loadingCategories.style.display = 'none';
+
+                if (querySnapshot.empty) {
+                    noCategoriesMessage.style.display = 'block';
+                    dynamicCategoriesGrid.appendChild(noCategoriesMessage);
+                    return;
+                }
+
+                let categories = [];
+                querySnapshot.forEach((doc) => {
+                    categories.push({ id: doc.id, ...doc.data() });
+                });
+
+                categories.sort((a, b) => a.name.localeCompare(b.name));
+
+                allCategories = categories; 
+
+                if (clearAndLoad) {
+                    dynamicCategoriesGrid.innerHTML = ''; 
+                    categories.forEach((category) => {
+                        dynamicCategoriesGrid.appendChild(createCategoryCardElement(category));
+                    });
+                } else {
+                    const currentQuery = searchInput.value.toLowerCase().trim();
+                    if (!currentQuery) {
+                        dynamicCategoriesGrid.innerHTML = '';
+                        categories.forEach((category) => {
+                            dynamicCategoriesGrid.appendChild(createCategoryCardElement(category));
+                        });
+                    }
+                }
+
+
+            } catch (error) {
+                console.error("Error fetching categories: ", error);
+                loadingCategories.style.display = 'none';
+                noCategoriesMessage.style.display = 'block';
+                noCategoriesMessage.innerHTML = `
+                    <i class="fas fa-exclamation-circle" style="font-size: 4rem; color: var(--warning); margin-bottom: 1rem;"></i>
+                    <h3>Error loading categories.</h3>
+                    <p>Please try again later.</p>
+                `;
+            }
+        }
+
+        function createCategoryCardElement(category) {
+            const categoryCard = document.createElement('div');
+            categoryCard.classList.add('category-card');
+            categoryCard.setAttribute('data-category-name', category.name);
+
+            categoryCard.innerHTML = `
+                <img src="${category.thumbnail}" alt="${category.name} Thumbnail" class="category-image" onerror="this.onerror=null; this.src='https://placehold.co/220x160/0f0c1d/ffffff?text=No+Image'">
+                <div class="category-name">${category.name}</div>
+            `;
+            categoryCard.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                document.querySelector('.tab[data-tab="home"]').classList.add('active');
+                Object.values(contents).forEach(content => {
+                    content.style.display = 'none';
+                });
+                contents['home'].style.display = 'block';
+                fetchVideosByCategory(category.name);
+                searchInput.value = '';
+                searchInput.classList.remove('active');
+            });
+            return categoryCard;
+        }
+
+        function createVideoCardElement(videoData) {
+            const videoCard = document.createElement('div');
+            videoCard.classList.add('video-card');
+            videoCard.setAttribute('data-video-id', videoData.id);
+            videoCard.setAttribute('data-video-url', videoData.url); 
+
+            const displayViews = formatMetricNumber(videoData.views || "0"); 
+            const displayLikes = formatMetricNumber(videoData.likes || "0"); 
+
+            videoCard.innerHTML = `
+                <div class="video-thumb">
+                    <img src="${videoData.thumbnail}" alt="Video Thumbnail" onerror="this.onerror=null; this.src='https://placehold.co/1260x750/0f0c1d/ffffff?text=No+Image'">
+                    <div class="video-duration">${videoData.duration}</div>
+                    <div class="play-btn">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <h3>${videoData.title}</h3>
+                    <div class="video-meta">
+                        <div class="video-views">
+                            <i class="fas fa-eye"></i> ${displayViews}
+                        </div>
+                        <div class="video-likes">
+                            <i class="fas fa-heart"></i> ${displayLikes}
+                        </div>
+                    </div>
+                </div>
+                <div class="heart-animation-container">
+                    <i class="fas fa-heart animated-heart"></i>
+                </div>
+            `;
+
+            let clickTimer = null;
+            let lastClickTime = 0;
+            videoCard.addEventListener('click', (event) => {
+                if (event.target.closest('.video-card') !== videoCard && !event.target.closest('.animated-heart')) {
+                    return;
+                }
+
+                const currentTime = new Date().getTime();
+                const DOUBLE_CLICK_TIME_THRESHOLD = 300;
+
+                if (currentTime - lastClickTime < DOUBLE_CLICK_TIME_THRESHOLD) {
+                    clearTimeout(clickTimer);
+                    clickTimer = null;
+
+                    const heartContainer = videoCard.querySelector('.heart-animation-container');
+                    const animatedHeart = heartContainer.querySelector('.animated-heart');
+                    heartContainer.style.display = 'flex';
+                    animatedHeart.classList.remove('animate-heart');
+                    void animatedHeart.offsetWidth; 
+                    animatedHeart.classList.add('animate-heart');
+
+                    animatedHeart.addEventListener('animationend', () => {
+                        heartContainer.style.display = 'none';
+                        animatedHeart.classList.remove('animate-heart');
+                    }, { once: true });
+
+                    incrementVideoMetric(videoData.id, 'likes'); 
+                    addVideoToFavorites(videoData); 
+                    lastClickTime = 0; 
+                } else {
+                    clickTimer = setTimeout(() => {
+                        window.open(videoData.url, '_blank');
+                        incrementVideoMetric(videoData.id, 'views');
+                        clickTimer = null;
+                    }, DOUBLE_CLICK_TIME_THRESHOLD);
+                }
+                lastClickTime = currentTime;
+            });
+
+            return videoCard;
+        }
+
+        function displayNoFavoritesMessage(message = "No favourites yet") {
+            const favouriteVideoGrid = document.getElementById('favourite-video-grid');
+            favouriteVideoGrid.innerHTML = '';
+            const noFavouriteVideosMessage = document.getElementById('no-favourite-videos');
+            noFavouriteVideosMessage.style.display = 'block';
+            noFavouriteVideosMessage.querySelector('h3').textContent = message;
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchPublicVideos();
+            fetchCategories(); 
+        });
+
+        onAuthStateChanged(auth, async (user) => {
+            const userDisplayInfo = document.getElementById('user-display-info');
+            const currentUserNameSpan = document.getElementById('current-user-name');
+            const googleLoginBtn = document.getElementById('google-login');
+            const guestLoginBtn = document.getElementById('guest-login');
+            const logoutBtn = document.getElementById('logout-button');
+            const profileBtnElement = document.getElementById('profile-btn');
+            const profileIconElement = document.getElementById('profile-icon');
+
+            if (user) {
+                console.log("User is signed in:", user.uid);
+                
+                if (user.photoURL) {
+                    profileBtnElement.style.backgroundImage = `url('${user.photoURL}')`;
+                    profileIconElement.style.display = 'none';
+                } else {
+                    profileBtnElement.style.backgroundImage = 'none';
+                    profileIconElement.style.display = 'block';
+                }
+
+                if (user.isAnonymous) {
+                    currentUserNameSpan.textContent = `Guest User (${user.uid.substring(0, 8)}...)`;
+                    googleLoginBtn.style.display = 'flex';
+                    guestLoginBtn.style.display = 'none';
+                } else {
+                    currentUserNameSpan.textContent = user.displayName || user.email;
+                    googleLoginBtn.style.display = 'none';
+                    guestLoginBtn.style.display = 'none';
+                }
+                userDisplayInfo.style.display = 'flex';
+                logoutBtn.style.display = 'flex';
+                
+                if (document.querySelector('.tab[data-tab="favourite"]').classList.contains('active')) {
+                    fetchUserFavorites(user.uid);
+                }
+            } else {
+                console.log("User is signed out.");
+
+                profileBtnElement.style.backgroundImage = 'none';
+                profileIconElement.style.display = 'block';
+                currentUserNameSpan.textContent = '';
+                userDisplayInfo.style.display = 'none';
+
+                googleLoginBtn.style.display = 'flex';
+                guestLoginBtn.style.display = 'flex';
+                logoutBtn.style.display = 'none';
+                
+                if (document.querySelector('.tab[data-tab="favourite"]').classList.contains('active')) {
+                    displayNoFavoritesMessage("Please log in to see your favourites.");
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>

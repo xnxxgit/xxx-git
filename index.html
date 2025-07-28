@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>XXX GIT</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      background: radial-gradient(circle at center, #1a0033 0%, #0b0014 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #000000;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      box-sizing: border-box;
+    }
+
+    .container {
+      background-color: rgba(25, 0, 40, 0.85);
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 30px #8e2eff;
+      max-width: 620px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .logo {
+      margin-bottom: 1px;
+    }
+
+    .logo img {
+      max-width: 200px;
+      width: 100%;
+      height: auto;
+      filter: drop-shadow(0 0 10px #b96aff);
+    }
+
+    h1 {
+      font-size: 28px;
+      color: #e0aaff;
+      text-shadow: 0 0 10px #a64dff;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 16px;
+      line-height: 1.5;
+      color: #d8caff;
+    }
+
+    .highlight {
+      color: #d275ff;
+      font-weight: bold;
+    }
+    .highlight a {
+        text-decoration: none;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s ease;
+      min-width: 140px;
+    }
+
+    .btn.enter {
+      background: linear-gradient(45deg, #d275ff, #a64dff);
+      color: #fff;
+      box-shadow: 0 0 10px #b84dff;
+    }
+
+    .btn.enter:hover {
+      background: linear-gradient(45deg, #c449ff, #8e2eff);
+    }
+
+    .btn.exit {
+      background-color: #2a003d;
+      color: #fff;
+      border: 1px solid #6f28a8;
+      box-shadow: 0 0 8px #7123b6;
+    }
+
+    .btn.exit:hover {
+      background-color: #3c0058;
+    }
+
+    .language-select {
+      text-align: left;
+      margin-bottom: 20px;
+    }
+
+    .language-select select {
+      padding: 6px;
+      background: #180024;
+      color: #fff;
+      border: 1px solid #7a28bf;
+      border-radius: 4px;
+      box-shadow: 0 0 5px #a64dff;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 25px;
+      }
+
+      h1 {
+        font-size: 22px;
+      }
+
+      p {
+        font-size: 14px;
+      }
+
+      .btn {
+        font-size: 14px;
+        padding: 12px;
+      }
+
+      .logo img {
+        max-width: 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="language-select">
+      <select id="languageSelector">
+        <option value="en">English</option>
+        <option value="es">Español</option>
+        <option value="fr">Français</option>
+        <option value="de">Deutsch</option>
+        <option value="zh">中文 (Zhōngwén)</option>
+        <option value="hi">हिन्दी (Hindi)</option>
+        <option value="ar">العربية (Arabic)</option>
+        <option value="bn">বাংলা (Bengali)</option>
+        <option value="pt">Português</option>
+        <option value="ru">Русский (Russian)</option>
+      </select>
+    </div>
+
+    <div class="logo">
+      <img src="logo.png" alt="Logo" />
+    </div>
+
+    <h1 id="mainHeading">This is an adult website</h1>
+
+    <p id="paragraph1">
+      This website contains age-restricted materials including nudity and explicit
+      depictions of sexual activity. By entering, you affirm that you are at least 18
+      years of age or the age of majority in the jurisdiction you are accessing the
+      website from and you consent to viewing sexually explicit content.
+    </p>
+
+    <p id="paragraph2">
+      XXX Git is a video aggregator that embeds content from external sources. We do not host any videos on our servers.
+      To see the updated changes, please see our
+      <a href="index.html" class="highlight">New Terms of Service</a>.
+    </p>
+
+    <div class="buttons">
+      <button class="btn enter" onclick="enterSite()">I am 18 or older - Enter</button>
+      <button class="btn exit" onclick="exitSite()">I am under 18 - Exit</button>
+    </div>
+  </div>
+
+  <script>
+    const translations = {
+      en: {
+        heading: "This is an adult website",
+        para1: "This website contains age-restricted materials including nudity and explicit depictions of sexual activity. By entering, you affirm that you are at least 18 years of age or the age of majority in the jurisdiction you are accessing the website from and you consent to viewing sexually explicit content.",
+        para2: "XXX Git is a video aggregator that embeds content from external sources. We do not host any videos on our servers. To see the updated changes, please see our <a href=\"index.html\" class=\"highlight\">New Terms of Service</a>.",
+        enterBtn: "I am 18 or older - Enter",
+        exitBtn: "I am under 18 - Exit"
+      },
+      es: {
+        heading: "Este es un sitio web para adultos",
+        para1: "Este sitio web contiene materiales restringidos por edad, incluyendo desnudez y representaciones explícitas de actividad sexual. Al ingresar, usted afirma que tiene al menos 18 años de edad o la mayoría de edad en la jurisdicción desde la que accede al sitio web y que consiente la visualización de contenido sexualmente explícito.",
+        para2: "XXX Git es un agregador de videos que incrusta contenido de fuentes externas. No alojamos ningún video en nuestros servidores. Para ver los cambios actualizados, consulte nuestros <a href=\"index.html\" class=\"highlight\">Nuevos Términos de Servicio</a>.",
+        enterBtn: "Tengo 18 años o más - Entrar",
+        exitBtn: "Soy menor de 18 años - Salir"
+      },
+      fr: {
+        heading: "Ceci est un site web para adultos",
+        para1: "Ce site web contient des matériaux soumis à des restrictions d'âge, y compris de la nudity et des représentations explicites d'activités sexuelles. En entrant, vous affirmez que vous avez au moins 18 ans ou l'âge de la majorité dans la juridiction depuis laquelle vous accédez au site web et vous consentez à visualiser du contenu sexuellement explicite.",
+        para2: "XXX Git est un agrégateur de vidéos qui intègre du contenu provenant de sources externes. Nous n'hébergeons aucune vidéo sur nos serveurs. Pour voir les modifications mises à jour, veuillez consulter nos <a href=\"index.html\" class=\"highlight\">Nouvelles Conditions d'Utilisation</a>.",
+        enterBtn: "J'ai 18 ans ou plus - Entrer",
+        exitBtn: "J'ai moins de 18 ans - Sortir"
+      },
+      de: {
+        heading: "Dies ist eine Erwachsenen-Website",
+        para1: "Diese Website enthält altersbeschränkte Materialien, einschließlich Nacktheit und explizite Darstellungen sexueller Handlungen. Durch den Eintritt bestätigen Sie, dass Sie mindestens 18 Jahre alt sind oder das in Ihrem Gerichtsstand geltende Volljährigkeitsalter erreicht haben und dass Sie der Anzeige von sexuell expliziten Inhalten zustimmen.",
+        para2: "XXX Git ist ein Video-Aggregator, der Inhalte von externen Quellen einbettet. Wir hosten keine Videos auf unseren Servern. Um die aktualisierten Änderungen zu sehen, lesen Sie bitte unsere <a href=\"index.html\" class=\"highlight\">Neuen Nutzungsbedingungen</a>.",
+        enterBtn: "Ich bin 18 Jahre oder älter - Eintreten",
+        exitBtn: "Ich bin unter 18 Jahren - Verlassen"
+      },
+      zh: {
+        heading: "这是一个成人网站",
+        para1: "本网站包含年龄限制材料，包括裸露和露骨的性行为描述。通过进入，您确认您已年满18岁或在您访问本网站的司法管辖区已达到法定成年年龄，并且您同意查看露骨的性内容。",
+        para2: "XXX Git是一个视频聚合器，它嵌入来自外部来源的内容。我们不在自己的服务器上托管任何视频。要查看更新的更改，请参阅我们的<a href=\"index.html\" class=\"highlight\">新服务条款</a>。",
+        enterBtn: "我已满18岁 - 进入",
+        exitBtn: "我未满18岁 - 退出"
+      },
+      hi: {
+        heading: "यह एक वयस्क वेबसाइट है",
+        para1: "इस वेबसाइट में नग्नता और यौन गतिविधि के स्पष्ट चित्रण सहित आयु-प्रतिबंधित सामग्री शामिल है। प्रवेश करके, आप पुष्टि करते हैं कि आपकी आयु कम से कम 18 वर्ष है या आप उस क्षेत्राधिकार में बहुमत की आयु के हैं जहाँ से आप वेबसाइट तक पहुँच रहे हैं और आप स्पष्ट यौन सामग्री देखने के लिए सहमत हैं।",
+        para2: "XXX Git एक वीडियो एग्रीगेटर है जो बाहरी स्रोतों से सामग्री एम्बेड करता है। हम अपने सर्वर पर कोई वीडियो होस्ट नहीं करते हैं। अद्यतन परिवर्तन देखने के लिए, कृपया हमारी <a href=\"index.html\" class=\"highlight\">नई सेवा की शर्तें</a> देखें।",
+        enterBtn: "मैं 18 वर्ष या उससे अधिक का हूँ - प्रवेश करें",
+        exitBtn: "मैं 18 वर्ष से कम का हूँ - बाहर निकलें"
+      },
+      ar: {
+        heading: "هذا موقع ويب للبالغين",
+        para1: "يحتوي هذا الموقع على مواد مقيدة العمر بما في ذلك العري والأوصاف الصريحة للنشاط الجنسي. بدخولك، فإنك تؤكد أن عمرك لا يقل عن 18 عامًا أو سن الرشد في الولاية القضائية التي تصل منها إلى الموقع، وتوافق على عرض محتوى جنسي صريح.",
+        para2: "XXX Git هو مجمع فيديو يقوم بتضمين محتوى من مصادر خارجية. نحن لا نستضيف أي مقاطع فيديو على خوادمنا. للاطلاع على التغييرات المحدثة، يرجى مراجعة <a href=\"index.html\" class=\"highlight\">شروط الخدمة الجديدة</a> الخاصة بنا.",
+        enterBtn: "أنا 18 عامًا أو أكبر - دخول",
+        exitBtn: "أنا أقل من 18 عامًا - خروج"
+      },
+      bn: {
+        heading: "এটি একটি প্রাপ্তবয়স্কদের ওয়েবসাইট",
+        para1: "এই ওয়েবসাইটে নগ্নতা এবং যৌন কার্যকলাপের স্পষ্ট চিত্র সহ বয়স-সীমাবদ্ধ উপাদান রয়েছে। প্রবেশ করে, আপনি নিশ্চিত করছেন যে আপনার বয়স কমপক্ষে 18 বছর বা আপনি যে বিচার বিভাগ থেকে ওয়েবসাইটটি অ্যাক্সেস করছেন সেখানে সংখ্যাগরিষ্ঠের বয়স এবং আপনি স্পষ্টভাবে যৌন সামগ্রী দেখতে সম্মত।",
+        para2: "XXX Git হল একটি ভিডিও সংগ্রাহক যা বাহ্যিক উৎস থেকে বিষয়বস্তু এম্বেড করে। আমরা আমাদের সার্ভারে কোনো ভিডিও হোস্ট করি না। আপডেট করা পরিবর্তনগুলি দেখতে, অনুগ্রহ করে আমাদের <a href=\"index.html\" class=\"highlight\">নতুন পরিষেবার শর্তাবলী</a> দেখুন।",
+        enterBtn: "আমার বয়স 18 বা তার বেশি - প্রবেশ করুন",
+        exitBtn: "আমার বয়স 18 এর নিচে - প্রস্থান করুন"
+      },
+      pt: {
+        heading: "Este é um site para adultos",
+        para1: "Este site contém materiais com restrição de idade, incluindo nudez e descrições explícitas de atividade sexual. Ao entrar, você afirma ter pelo menos 18 anos de idade ou a idade da maioridade na jurisdição de onde você está acessando o site e que consente em visualizar conteúdo sexualmente explícito.",
+        para2: "XXX Git é um agregador de vídeos que incorpora conteúdo de fontes externas. Não hospedamos nenhum vídeo em nossos servidores. Para ver as alterações atualizadas, consulte nossos <a href=\"index.html\" class=\"highlight\">Novos Termos de Serviço</a>.",
+        enterBtn: "Tenho 18 anos ou mais - Entrar",
+        exitBtn: "Tenho menos de 18 anos - Sair"
+      },
+      ru: {
+        heading: "Это веб-сайт для взрослых",
+        para1: "Этот веб-сайт содержит материалы с возрастными ограничениями, включая наготу и откровенные описания сексуальной активности. Войдя, вы подтверждаете, что вам не менее 18 лет или вы достигли совершеннолетия в юрисдикции, из которой вы заходите на веб-сайт, и даете согласие на просмотр откровенного сексуального контента.",
+        para2: "XXX Git — это агрегатор видео, который встраивает контент из внешних источников. Мы не размещаем видео на наших серверах. Чтобы ознакомиться с обновленными изменениями, пожалуйста, ознакомьтесь с нашими <a href=\"index.html\" class=\"highlight\">Новыми Условиями Обслуживания</a>.",
+        enterBtn: "Мне 18 лет или больше - Войти",
+        exitBtn: "Мне меньше 18 лет - Выйти"
+      }
+    };
+
+    function updateContent(language) {
+      document.getElementById('mainHeading').innerText = translations[language].heading;
+      document.getElementById('paragraph1').innerText = translations[language].para1;
+      document.getElementById('paragraph2').innerHTML = translations[language].para2;
+      document.querySelector('.btn.enter').innerText = translations[language].enterBtn;
+      document.querySelector('.btn.exit').innerText = translations[language].exitBtn;
+    }
+
+    document.getElementById('languageSelector').addEventListener('change', function() {
+      updateContent(this.value);
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      updateContent('en');
+    });
+
+    function enterSite() {
+      window.location.href = "web.html";
+    }
+
+    function exitSite() {
+      window.location.href = "ageFalse.html";
+    }
+  </script>
+</body>
+</html>

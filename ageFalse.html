@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>18+ Warning</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      background-color: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .logo {
+      width: 200px;
+      max-width: 50vw;
+      height: auto;
+      margin-bottom: 20px;
+    }
+
+    .message {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      padding: 0 20px;
+    }
+
+    @media (min-width: 768px) {
+      .message {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Replace logo.png with your own logo -->
+  <img src="logo.png" alt="Logo" class="logo" />
+
+  <div class="message">
+    This website is only<br>
+    intended for users over the<br>
+    age of 18.
+  </div>
+
+</body>
+</html>

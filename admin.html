@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XXX Git - Admin Host</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0815, #0f0c1d);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container, .video-list-container, .category-list-container {
+            background-color: #1a1629;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(176, 38, 255, 0.5);
+            width: 100%;
+            max-width: 480px;
+            margin-top: 30px;
+            border: 1px solid #ff26b2;
+            margin-bottom: 30px;
+            box-sizing: border-box;
+        }
+
+        h1, h2 {
+            color: #ff26b2;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px rgba(255, 38, 178, 0.7);
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #b0b3c5;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: calc(100% - 20px);
+            padding: 12px 10px;
+            border: 1px solid #b026ff;
+            border-radius: 8px;
+            background-color: #0f0c1d;
+            color: #ffffff;
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            box-sizing: border-box;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #ff26b2;
+            box-shadow: 0 0 10px rgba(255, 38, 178, 0.5);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex-grow: 1;
+            min-width: 120px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, #ff26b2, #b026ff);
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 38, 178, 0.4);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 38, 178, 0.6);
+        }
+
+        .clear-btn, .cancel-edit-btn {
+            background-color: #555;
+            color: white;
+        }
+
+        .clear-btn:hover, .cancel-edit-btn:hover {
+            background-color: #777;
+        }
+
+        .message-box {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #28a745;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .message-box.error {
+            background-color: #dc3545;
+        }
+        .message-box.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .video-item, .category-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .video-item:last-child, .category-item:last-child {
+            border-bottom: none;
+        }
+
+        .video-item img, .category-item img {
+            width: 80px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+            flex-shrink: 0;
+        }
+
+        .video-details, .category-details {
+            flex-grow: 1;
+            min-width: 150px;
+        }
+
+        .video-details h3, .category-details h3 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            color: #ffffff;
+        }
+
+        .video-details p, .category-details p {
+            font-size: 0.9rem;
+            color: #b0b3c5;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .delete-btn, .edit-btn, .reset-views-btn, .reset-likes-btn {
+            background-color: #dc3545;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: background-color 0.3s, transform 0.3s;
+            flex-shrink: 0;
+            flex-basis: calc(50% - 5px);
+            max-width: calc(50% - 5px);
+            box-sizing: border-box;
+        }
+
+        .edit-btn {
+            background-color: #007bff;
+        }
+
+        .reset-views-btn {
+            background-color: #ffc107;
+            color: #333;
+        }
+
+        .reset-likes-btn {
+            background-color: #17a2b8;
+        }
+
+        .delete-btn:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .edit-btn:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .reset-views-btn:hover {
+            background-color: #e0a800;
+            transform: translateY(-2px);
+        }
+
+        .reset-likes-btn:hover {
+            background-color: #138496;
+            transform: translateY(-2px);
+        }
+
+        .no-videos-message, .no-categories-message {
+            text-align: center;
+            padding: 20px;
+            color: #b0b3c5;
+            font-style: italic;
+        }
+
+        .custom-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .custom-box {
+            background-color: #1a1629;
+            color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            border: 1px solid #ff26b2;
+            width: 90%;
+            max-width: 400px;
+            box-sizing: border-box;
+        }
+
+        .custom-box p {
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .custom-box button {
+            background-color: #ff26b2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: 600;
+        }
+
+        .custom-box button:hover {
+            background-color: #d81b60;
+        }
+
+        .custom-prompt-buttons {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .custom-prompt-buttons button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 5px;
+        }
+
+        .custom-prompt-buttons .no-btn {
+            background-color: #555;
+        }
+
+        .custom-prompt-buttons .no-btn:hover {
+            background-color: #777;
+        }
+
+        #login-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        #login-section h1 {
+            margin-bottom: 20px;
+        }
+
+        #login-section button {
+            background: linear-gradient(45deg, #8a2be2, #ff00ff);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            height: 10vh;
+            width: 100%;
+            justify-content: center;
+            max-width: 250px;
+        }
+
+        #login-section button:hover {
+            background: linear-gradient(45deg, #9932cc, #ee00ee);
+            transform: translateY(-2px);
+        }
+
+        #login-section .google-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        #admin-content {
+            display: none;
+            width: 100%;
+            max-width: 480px;
+            margin-top: 30px;
+            box-sizing: border-box;
+        }
+
+        #auth-status {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: rgba(26, 22, 41, 0.8);
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: #b0b3c5;
+            z-index: 1001;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            max-width: 460px;
+            justify-content: center;
+            flex-wrap: wrap;
+            top: 10px;
+            box-sizing: border-box;
+        }
+
+        #auth-status .user-email {
+            font-weight: 600;
+            color: #ff26b2;
+            text-align: center;
+            flex-basis: 100%;
+            margin-bottom: 5px;
+        }
+
+        #auth-status button {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            border-radius: 20px;
+            background-color: #dc3545;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            flex-grow: 1;
+            max-width: 150px;
+        }
+
+        #auth-status button:hover {
+            background-color: #c82333;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding-top: 30%;
+            }
+            .container, .video-list-container, .category-list-container {
+                padding: 20px;
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
+            h1, h2 {
+                font-size: 2rem;
+            }
+            .button-group button {
+                width: 100%;
+                min-width: unset;
+            }
+            .video-item, .category-item {
+                flex-direction: column;
+                align-items: flex-start;
+                text-align: left;
+                padding: 10px;
+            }
+            .video-item img, .category-item img {
+                margin-bottom: 10px;
+            }
+            .action-buttons {
+                flex-direction: column;
+                width: 100%;
+                margin-top: 10px;
+            }
+            .delete-btn, .edit-btn, .reset-views-btn, .reset-likes-btn {
+                width: 100%;
+                max-width: unset;
+                margin-top: 5px;
+            }
+            .custom-box {
+                padding: 15px;
+            }
+            #auth-status {
+                width: calc(100% - 20px);
+                padding: 8px 10px;
+            }
+        </style>
+</head>
+<body>
+    <div id="auth-status" style="display:none;">
+        Logged in as: <span class="user-email" id="user-email"></span>
+        <button id="sign-out-btn">Sign Out</button>
+    </div>
+
+    <div id="login-section">
+        <h1>Admin Access Required</h1>
+        <p>Please sign in with your authorized Google account to access the administration panel.</p>
+        <button id="sign-in-google-btn">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google icon" class="google-icon">
+            Sign In with Google
+        </button>
+        <p id="auth-error-message" style="color: #dc3545; margin-top: 20px; display: none;"></p>
+    </div>
+
+    <div id="admin-content">
+        <div class="container">
+            <h1 id="video-form-title">Add New Video Content</h1>
+            <form id="video-form">
+                <div class="form-group">
+                    <label for="videoTitle">Video Title:</label>
+                    <input type="text" id="videoTitle" required placeholder="e.g., Passionate Encounter - Late Night Session">
+                </div>
+                <div class="form-group">
+                    <label for="thumbnailUrl">Thumbnail Image URL:</label>
+                    <input type="text" id="thumbnailUrl" required placeholder="e.g., https://example.com/thumb.jpg">
+                </div>
+                <div class="form-group">
+                    <label for="videoUrl">Video Play URL (e.g., YouTube video link):</label>
+                    <input type="text" id="videoUrl" required placeholder="e.e.g., https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+                </div>
+                <div class="form-group">
+                    <label for="videoDuration">Duration (e.g., 22:15):</label>
+                    <input type="text" id="videoDuration" required placeholder="e.g., 22:15">
+                </div>
+                <div class="form-group">
+                    <label for="videoCategory">Category:</label>
+                    <select id="videoCategory" required>
+                        <option value="">-- Select a Category --</option>
+                        </select>
+                </div>
+                <div class="button-group">
+                    <button type="submit" class="submit-btn" id="video-submit-btn"><i class="fas fa-plus-circle"></i> Add Video</button>
+                    <button type="button" class="clear-btn" id="clear-video-form-btn"><i class="fas fa-eraser"></i> Clear Form</button>
+                    <button type="button" class="cancel-edit-btn" id="cancel-video-edit-btn" style="display:none;"><i class="fas fa-times-circle"></i> Cancel Edit</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="container">
+            <h1 id="category-form-title">Add New Category</h1>
+            <form id="category-form">
+                <div class="form-group">
+                    <label for="categoryName">Category Name:</label>
+                    <input type="text" id="categoryName" required placeholder="e.g., Anal, Asian, Blowjob">
+                </div>
+                <div class="form-group">
+                    <label for="categoryThumbnailUrl">Category Thumbnail URL:</label>
+                    <input type="text" id="categoryThumbnailUrl" required placeholder="e.g., https://example.com/category_thumb.jpg">
+                </div>
+                <div class="button-group">
+                    <button type="submit" class="submit-btn" id="category-submit-btn"><i class="fas fa-plus-circle"></i> Add Category</button>
+                    <button type="button" class="clear-btn" id="clear-category-form-btn"><i class="fas fa-eraser"></i> Clear Form</button>
+                    <button type="button" class="cancel-edit-btn" id="cancel-category-edit-btn" style="display:none;"><i class="fas fa-times-circle"></i> Cancel Edit</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="category-list-container">
+            <h2>Manage Existing Categories</h2>
+            <div id="admin-category-list">
+                <div class="no-categories-message" id="no-admin-categories">
+                    <i class="fas fa-info-circle"></i> No categories added yet.
+                </div>
+            </div>
+        </div>
+
+        <div class="video-list-container">
+            <h2>Manage Existing Videos</h2>
+            <div id="admin-video-list">
+                <div class="no-videos-message" id="no-admin-videos">
+                    <i class="fas fa-info-circle"></i> No videos added yet.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="message-box" class="message-box"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAsZ-nw5UgKRotI2_Kgb9V-BFXS3JoX7UU",
+            authDomain: "xxx-git.firebaseapp.com",
+            projectId: "xxx-git",
+            storageBucket: "xxx-git.firebasestorage.app",
+            messagingSenderId: "1097384679265",
+            appId: "1:1097384679265:web:3969c888f193b42f8bd720",
+            measurementId: "G-TFJW56LFKV"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        const ADMIN_UID = 'aftLs2g87NUlfXTFBa0z2nFfQuu2'; 
+        const ADMIN_EMAIL = 'gitxnxx@gmail.com';
+
+        const loginSection = document.getElementById('login-section');
+        const adminContent = document.getElementById('admin-content');
+        const signInGoogleBtn = document.getElementById('sign-in-google-btn');
+        const signOutBtn = document.getElementById('sign-out-btn');
+        const userEmailSpan = document.getElementById('user-email');
+        const authStatusDiv = document.getElementById('auth-status');
+        const authErrorMessage = document.getElementById('auth-error-message');
+
+        onAuthStateChanged(auth, (user) => {
+            if (user && user.uid === ADMIN_UID && user.email === ADMIN_EMAIL) {
+                loginSection.style.display = 'none';
+                adminContent.style.display = 'block';
+                authStatusDiv.style.display = 'flex';
+                userEmailSpan.textContent = user.email;
+                authErrorMessage.style.display = 'none';
+
+                fetchAndDisplayAdminVideos();
+                fetchAndDisplayAdminCategories();
+                populateCategoryDropdown();
+                showMessage("Admin access granted. Welcome!", 'success');
+            } else {
+                loginSection.style.display = 'flex';
+                adminContent.style.display = 'none';
+                authStatusDiv.style.display = 'none';
+                userEmailSpan.textContent = '';
+                if (user) {
+                    authErrorMessage.textContent = `You are signed in as ${user.email}, but not authorized to access this admin panel.`;
+                    authErrorMessage.style.display = 'block';
+                    showMessage("Authorization failed. Please use an authorized account.", 'error');
+                } else {
+                    authErrorMessage.textContent = "";
+                    authErrorMessage.style.display = 'none';
+                }
+            }
+        });
+
+        signInGoogleBtn.addEventListener('click', async () => {
+            try {
+                await signInWithPopup(auth, provider);
+            } catch (error) {
+                console.error("Error during Google sign-in:", error);
+                authErrorMessage.textContent = `Sign-in failed: ${error.message}`;
+                authErrorMessage.style.display = 'block';
+                showMessage("Google sign-in failed. Please try again.", 'error');
+            }
+        });
+
+        signOutBtn.addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                showMessage("Signed out successfully.", 'success');
+            } catch (error) {
+                console.error("Error during sign-out:", error);
+                showMessage("Error signing out: " + error.message, 'error');
+            }
+        });
+
+        const videoForm = document.getElementById('video-form');
+        const videoFormTitle = document.getElementById('video-form-title');
+        const videoSubmitBtn = document.getElementById('video-submit-btn');
+        const clearVideoFormBtn = document.getElementById('clear-video-form-btn');
+        const cancelVideoEditBtn = document.getElementById('cancel-video-edit-btn');
+        const messageBox = document.getElementById('message-box');
+        const adminVideoList = document.getElementById('admin-video-list');
+        const noAdminVideosMessage = document.getElementById('no-admin-videos');
+        const videoCategorySelect = document.getElementById('videoCategory');
+
+        const categoryForm = document.getElementById('category-form');
+        const categoryFormTitle = document.getElementById('category-form-title');
+        const categorySubmitBtn = document.getElementById('category-submit-btn');
+        const clearCategoryFormBtn = document.getElementById('clear-category-form-btn');
+        const cancelCategoryEditBtn = document.getElementById('cancel-category-edit-btn');
+        const adminCategoryList = document.getElementById('admin-category-list');
+        const noAdminCategoriesMessage = document.getElementById('no-admin-categories');
+
+        let editingVideoId = null;
+        let editingCategoryId = null;
+
+        function showMessage(message, type = 'success') {
+            messageBox.textContent = message;
+            messageBox.className = 'message-box show';
+            if (type === 'error') {
+                messageBox.classList.add('error');
+            } else {
+                messageBox.classList.remove('error');
+            }
+            setTimeout(() => {
+                messageBox.classList.remove('show');
+            }, 3000);
+        }
+
+        function showCustomMessage(message) {
+            const overlay = document.createElement('div');
+            overlay.classList.add('custom-overlay');
+            overlay.innerHTML = `
+                <div class="custom-box">
+                    <p>${message}</p>
+                    <button>OK</button>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+            overlay.querySelector('button').addEventListener('click', () => {
+                document.body.removeChild(overlay);
+            });
+        }
+
+        function showCustomPrompt(message, callback) {
+            const overlay = document.createElement('div');
+            overlay.classList.add('custom-overlay');
+            overlay.innerHTML = `
+                <div class="custom-box">
+                    <p>${message}</p>
+                    <div class="custom-prompt-buttons">
+                        <button class="yes-btn">Yes</button>
+                        <button class="no-btn">No</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+
+            const yesBtn = overlay.querySelector('.yes-btn');
+            const noBtn = overlay.querySelector('.no-btn');
+
+            yesBtn.addEventListener('click', () => {
+                document.body.removeChild(overlay);
+                callback(true);
+            });
+
+            noBtn.addEventListener('click', () => {
+                document.body.removeChild(overlay);
+                callback(false);
+            });
+        }
+
+        function resetVideoForm() {
+            videoForm.reset();
+            editingVideoId = null;
+            videoFormTitle.textContent = 'Add New Video Content';
+            videoSubmitBtn.innerHTML = '<i class="fas fa-plus-circle"></i> Add Video';
+            cancelVideoEditBtn.style.display = 'none';
+        }
+
+        videoForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const videoTitle = document.getElementById('videoTitle').value;
+            const thumbnailUrl = document.getElementById('thumbnailUrl').value;
+            const videoUrl = document.getElementById('videoUrl').value;
+            const videoDuration = document.getElementById('videoDuration').value;
+            const videoCategory = videoCategorySelect.value;
+            
+            const initialViews = "0";
+            const initialLikes = "0";
+            const initialDescription = "No description available.";
+
+            const videoData = {
+                title: videoTitle,
+                thumbnail: thumbnailUrl,
+                url: videoUrl,
+                duration: videoDuration,
+                description: initialDescription,
+                category: videoCategory,
+            };
+
+            if (editingVideoId) {
+                try {
+                    await updateDoc(doc(db, "public_videos", editingVideoId), {
+                        title: videoData.title,
+                        thumbnail: videoData.thumbnail,
+                        url: videoData.url,
+                        duration: videoData.duration,
+                        category: videoData.category
+                    });
+                    showMessage("Video updated successfully!");
+                    console.log("Document updated with ID: ", editingVideoId);
+                } catch (e) {
+                    console.error("Error updating document: ", e);
+                    showMessage("Error updating video: " + e.message, 'error');
+                }
+            } else {
+                try {
+                    const docRef = await addDoc(collection(db, "public_videos"), {
+                        ...videoData,
+                        views: initialViews,
+                        likes: initialLikes,
+                        createdAt: new Date()
+                    });
+                    showMessage("Video added successfully!");
+                    console.log("Document written with ID: ", docRef.id);
+                } catch (e) {
+                    console.error("Error adding document: ", e);
+                    showMessage("Error adding video: " + e.message, 'error');
+                }
+            }
+            resetVideoForm();
+            fetchAndDisplayAdminVideos();
+        });
+
+        clearVideoFormBtn.addEventListener('click', () => {
+            resetVideoForm();
+            showMessage("Video form cleared.");
+        });
+
+        cancelVideoEditBtn.addEventListener('click', () => {
+            resetVideoForm();
+            showMessage("Video edit cancelled.");
+        });
+
+        async function fetchAndDisplayAdminVideos() {
+            adminVideoList.innerHTML = '';
+            noAdminVideosMessage.style.display = 'none';
+
+            try {
+                const publicVideosRef = collection(db, 'public_videos');
+                const querySnapshot = await getDocs(publicVideosRef);
+
+                if (querySnapshot.empty) {
+                    noAdminVideosMessage.style.display = 'block';
+                    return;
+                }
+
+                let videos = [];
+                querySnapshot.forEach((doc) => {
+                    videos.push({ id: doc.id, ...doc.data() });
+                });
+
+                videos.sort((a, b) => {
+                    const dateA = a.createdAt ? a.createdAt.toDate() : new Date(0);
+                    const dateB = b.createdAt ? b.createdAt.toDate() : new Date(0);
+                    return dateB - dateA;
+                });
+
+                videos.forEach((video) => {
+                    const videoItem = document.createElement('div');
+                    videoItem.classList.add('video-item');
+                    videoItem.setAttribute('data-video-id', video.id);
+
+                    videoItem.innerHTML = `
+                        <img src="${video.thumbnail}" alt="Thumbnail" onerror="this.onerror=null; this.src='https://placehold.co/80x50/0f0c1d/ffffff?text=No+Image'">
+                        <div class="video-details">
+                            <h3>${video.title}</h3>
+                            <p>Category: ${video.category || 'N/A'}</p>
+                            <p>Duration: ${video.duration} | Views: ${video.views} | Likes: ${video.likes}</p>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="edit-btn" data-id="${video.id}" data-title="${video.title}" 
+                                data-thumbnail="${video.thumbnail}" data-url="${video.url}" 
+                                data-duration="${video.duration}" data-category="${video.category}">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="reset-views-btn" data-id="${video.id}" data-title="${video.title}"><i class="fas fa-eye-slash"></i> Reset Views</button>
+                            <button class="reset-likes-btn" data-id="${video.id}" data-title="${video.title}"><i class="fas fa-thumbs-down"></i> Reset Likes</button>
+                            <button class="delete-btn" data-id="${video.id}"><i class="fas fa-trash"></i> Delete</button>
+                        </div>
+                    `;
+                    adminVideoList.appendChild(videoItem);
+                });
+
+                adminVideoList.querySelectorAll('.delete-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const videoIdToDelete = e.currentTarget.getAttribute('data-id');
+                        showCustomPrompt(`Are you sure you want to delete "${e.currentTarget.closest('.video-item').querySelector('h3').textContent}"? This action cannot be undone.`, (response) => {
+                            if (response) {
+                                deleteVideo(videoIdToDelete);
+                            }
+                        });
+                    });
+                });
+
+                adminVideoList.querySelectorAll('.edit-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        editingVideoId = e.currentTarget.getAttribute('data-id');
+                        document.getElementById('videoTitle').value = e.currentTarget.getAttribute('data-title');
+                        document.getElementById('thumbnailUrl').value = e.currentTarget.getAttribute('data-thumbnail');
+                        document.getElementById('videoUrl').value = e.currentTarget.getAttribute('data-url');
+                        document.getElementById('videoDuration').value = e.currentTarget.getAttribute('data-duration');
+                        videoCategorySelect.value = e.currentTarget.getAttribute('data-category').toLowerCase();
+                        
+                        videoFormTitle.textContent = 'Edit Video Content';
+                        videoSubmitBtn.innerHTML = '<i class="fas fa-save"></i> Update Video';
+                        cancelVideoEditBtn.style.display = 'inline-block';
+                        showMessage("Editing video: " + e.currentTarget.getAttribute('data-title'));
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    });
+                });
+
+                adminVideoList.querySelectorAll('.reset-views-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const videoIdToResetViews = e.currentTarget.getAttribute('data-id');
+                        const videoTitle = e.currentTarget.getAttribute('data-title');
+                        showCustomPrompt(`Are you sure you want to reset views for "${videoTitle}" to 0?`, (response) => {
+                            if (response) {
+                                resetVideoViews(videoIdToResetViews, videoTitle);
+                            }
+                        });
+                    });
+                });
+
+                adminVideoList.querySelectorAll('.reset-likes-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const videoIdToResetLikes = e.currentTarget.getAttribute('data-id');
+                        const videoTitle = e.currentTarget.getAttribute('data-title');
+                        showCustomPrompt(`Are you sure you want to reset likes for "${videoTitle}" to 0?`, (response) => {
+                            if (response) {
+                                resetVideoLikes(videoIdToResetLikes, videoTitle);
+                            }
+                        });
+                    });
+                });
+
+            } catch (error) {
+                console.error("Error fetching admin videos: ", error);
+                adminVideoList.innerHTML = `
+                    <div class="no-videos-message" style="color: #dc3545;">
+                        <i class="fas fa-exclamation-circle"></i> Error loading videos.
+                    </div>
+                `;
+            }
+        }
+
+        async function deleteVideo(videoId) {
+            try {
+                await deleteDoc(doc(db, "public_videos", videoId));
+                showMessage("Video deleted successfully!");
+                console.log("Document successfully deleted with ID:", videoId);
+                fetchAndDisplayAdminVideos();
+            } catch (error) {
+                console.error("Error deleting document: ", error);
+                showMessage("Error deleting video: " + error.message, 'error');
+            }
+        }
+
+        async function resetVideoViews(videoId, videoTitle) {
+            try {
+                await updateDoc(doc(db, "public_videos", videoId), {
+                    views: "0"
+                });
+                showMessage(`Views for "${videoTitle}" reset to 0!`);
+                console.log(`Views for video ID: ${videoId} reset to 0.`);
+                fetchAndDisplayAdminVideos();
+            } catch (error) {
+                console.error("Error resetting views: ", error);
+                showMessage(`Error resetting views for "${videoTitle}": ` + error.message, 'error');
+            }
+        }
+
+        async function resetVideoLikes(videoId, videoTitle) {
+            try {
+                await updateDoc(doc(db, "public_videos", videoId), {
+                    likes: "0"
+                });
+                showMessage(`Likes for "${videoTitle}" reset to 0!`);
+                console.log(`Likes for video ID: ${videoId} reset to 0.`);
+                fetchAndDisplayAdminVideos();
+            } catch (error) {
+                console.error("Error resetting likes: ", error);
+                showMessage(`Error resetting likes for "${videoTitle}": ` + error.message, 'error');
+            }
+        }
+
+        function resetCategoryForm() {
+            categoryForm.reset();
+            editingCategoryId = null;
+            categoryFormTitle.textContent = 'Add New Category';
+            categorySubmitBtn.innerHTML = '<i class="fas fa-plus-circle"></i> Add Category';
+            cancelCategoryEditBtn.style.display = 'none';
+        }
+
+        categoryForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const categoryName = document.getElementById('categoryName').value.trim();
+            const categoryThumbnailUrl = document.getElementById('categoryThumbnailUrl').value.trim();
+
+            if (!categoryName || !categoryThumbnailUrl) {
+                showMessage("Category name and thumbnail URL cannot be empty.", 'error');
+                return;
+            }
+
+            if (editingCategoryId) {
+                try {
+                    await updateDoc(doc(db, "categories", editingCategoryId), {
+                        name: categoryName,
+                        thumbnail: categoryThumbnailUrl
+                    });
+                    showMessage("Category updated successfully!");
+                    console.log("Category updated with ID: ", editingCategoryId);
+                } catch (e) {
+                    console.error("Error updating category: ", e);
+                    showMessage("Error updating category: " + e.message, 'error');
+                }
+            } else {
+                try {
+                    const categoriesRef = collection(db, "categories");
+                    const querySnapshot = await getDocs(categoriesRef);
+                    const existingCategories = querySnapshot.docs.map(doc => doc.data().name.toLowerCase());
+
+                    if (existingCategories.includes(categoryName.toLowerCase())) {
+                        showMessage("Category already exists!", 'error');
+                        return;
+                    }
+
+                    await addDoc(categoriesRef, { 
+                        name: categoryName, 
+                        thumbnail: categoryThumbnailUrl,
+                        createdAt: new Date() 
+                    });
+                    showMessage("Category added successfully!");
+                    console.log("Category added with name: ", categoryName);
+                } catch (e) {
+                    console.error("Error adding category: ", e);
+                    showMessage("Error adding category: " + e.message, 'error');
+                }
+            }
+            resetCategoryForm();
+            fetchAndDisplayAdminCategories();
+            populateCategoryDropdown();
+        });
+
+        clearCategoryFormBtn.addEventListener('click', () => {
+            resetCategoryForm();
+            showMessage("Category form cleared.");
+        });
+
+        cancelCategoryEditBtn.addEventListener('click', () => {
+            resetCategoryForm();
+            showMessage("Category edit cancelled.");
+        });
+
+        async function fetchAndDisplayAdminCategories() {
+            adminCategoryList.innerHTML = '';
+            noAdminCategoriesMessage.style.display = 'none';
+
+            try {
+                const categoriesRef = collection(db, 'categories');
+                const querySnapshot = await getDocs(categoriesRef);
+                
+                if (querySnapshot.empty) {
+                    noAdminCategoriesMessage.style.display = 'block';
+                    return;
+                }
+
+                let categories = [];
+                querySnapshot.forEach((doc) => {
+                    categories.push({ id: doc.id, name: doc.data().name });
+                });
+                categories.sort((a, b) => a.name.localeCompare(b.name));
+
+                categories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.name.toLowerCase();
+                    option.textContent = category.name;
+                    videoCategorySelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error("Error populating categories dropdown: ", error);
+                showMessage("Error loading categories for dropdown.", 'error');
+            }
+        }
+
+        async function deleteCategory(categoryId) {
+            try {
+                await deleteDoc(doc(db, "categories", categoryId));
+                showMessage("Category deleted successfully!");
+                console.log("Category successfully deleted with ID:", categoryId);
+                fetchAndDisplayAdminCategories();
+                populateCategoryDropdown();
+            } catch (error) {
+                console.error("Error deleting category: ", error);
+                showMessage("Error deleting category: " + error.message, 'error');
+            }
+        }
+
+        async function populateCategoryDropdown() {
+            videoCategorySelect.innerHTML = '<option value="">-- Select a Category --</option>';
+            try {
+                const categoriesRef = collection(db, 'categories');
+                const querySnapshot = await getDocs(categoriesRef);
+                
+                let categories = [];
+                querySnapshot.forEach((doc) => {
+                    categories.push({ id: doc.id, name: doc.data().name });
+                });
+                categories.sort((a, b) => a.name.localeCompare(b.name));
+
+                categories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.name.toLowerCase();
+                    option.textContent = category.name;
+                    videoCategorySelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error("Error populating categories dropdown: ", error);
+                showMessage("Error loading categories for dropdown.", 'error');
+            }
+        }
+    </script>
+</body>
+</html>
