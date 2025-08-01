@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XXX Git - Admin Host</title>
+    <title>XXX GIT</title>
 
     <link rel="apple-touch-icon" sizes="57x57" href="favicon/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="favicon/apple-icon-60x60.png">
@@ -24,247 +24,596 @@
     <meta name="theme-color" content="#ffffff">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0a0815, #0f0c1d);
-            color: #ffffff;
+        }
+
+        :root {
+            --neon-pink: #a020f0; 
+            --neon-purple: #8a2be2; 
+            --dark-bg: #0d0a1b; 
+            --darker-bg: #080610; 
+            --card-bg: #151125; 
+            --text: #ffffff;
+            --text-secondary: #c0c3d5; 
+            --warning: #ff5722;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--darker-bg), var(--dark-bg));
+            color: var(--text);
             min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: rgba(8, 6, 16, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.2rem 5%;
             display: flex;
-            flex-direction: column;
+            flex-direction: column; 
+            gap: 1rem; 
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            border-bottom: 1px solid rgba(138, 43, 226, 0.2);
+        }
+
+        .header-top-row { 
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            padding: 20px;
-            box-sizing: border-box;
+            width: 100%; 
         }
 
-        .container, .video-list-container, .category-list-container {
-            background-color: #1a1629;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 0 30px rgba(176, 38, 255, 0.5);
-            width: 100%;
-            max-width: 480px;
-            margin-top: 30px;
-            border: 1px solid #ff26b2;
-            margin-bottom: 30px;
-            box-sizing: border-box;
-        }
-
-        h1, h2 {
-            color: #ff26b2;
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 2.5rem;
-            text-shadow: 0 0 10px rgba(255, 38, 178, 0.7);
-        }
-
-        h2 {
-            font-size: 2rem;
-            margin-top: 40px;
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #b0b3c5;
-        }
-
-        input[type="text"],
-        input[type="number"],
-        textarea,
-        select {
-            width: calc(100% - 20px);
-            padding: 12px 10px;
-            border: 1px solid #b026ff;
-            border-radius: 8px;
-            background-color: #0f0c1d;
-            color: #ffffff;
-            font-size: 1rem;
-            transition: border-color 0.3s, box-shadow 0.3s;
-            box-sizing: border-box;
-        }
-
-        input[type="text"]:focus,
-        input[type="number"]:focus,
-        textarea:focus,
-        select:focus {
-            outline: none;
-            border-color: #ff26b2;
-            box-shadow: 0 0 10px rgba(255, 38, 178, 0.5);
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        .button-group {
+        .logo {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--text);
+            text-decoration: none;
+            text-shadow:
+                0 0 15px var(--neon-pink),
+                0 0 30px var(--neon-purple),
+                0 0 45px rgba(138, 43, 226, 0.8),
+                0 0 60px rgba(160, 32, 240, 0.6);
+            letter-spacing: 1.5px;
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 30px;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        button {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            flex-grow: 1;
-            min-width: 120px;
+        .logo i {
+            color: var(--neon-pink);
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px var(--neon-pink);
         }
 
-        .submit-btn {
-            background: linear-gradient(45deg, #ff26b2, #b026ff);
+        .warning-badge {
+            background-color: red;
             color: white;
-            box-shadow: 0 5px 15px rgba(255, 38, 178, 0.4);
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            margin-left: 0.5rem;
+            vertical-align: super;
         }
 
-        .submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(255, 38, 178, 0.6);
+        .header-right { 
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
         }
 
-        .clear-btn, .cancel-edit-btn {
-            background-color: #555;
-            color: white;
+        .search-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 100%; 
+            justify-content: flex-end; 
         }
 
-        .clear-btn:hover, .cancel-edit-btn:hover {
-            background-color: #777;
-        }
-
-        .message-box {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #28a745;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            z-index: 1000;
+        .search-input {
+            background: var(--card-bg);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            border-radius: 20px;
+            padding: 0.7rem 1.2rem;
+            padding-right: 2.8rem;
+            color: var(--text);
+            font-size: 1rem;
+            width: 0; 
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
+            transition: width 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+            box-shadow: 0 0 10px rgba(160, 32, 240, 0.2);
         }
-        .message-box.error {
-            background-color: #dc3545;
-        }
-        .message-box.show {
+
+        .search-input.active {
+            width: calc(100% - 40px); 
             opacity: 1;
             visibility: visible;
         }
 
-        .video-item, .category-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            justify-content: space-between;
-            flex-wrap: wrap;
+        .search-btn {
+            background: transparent;
+            border: none;
+            color: var(--text);
+            cursor: pointer;
+            font-size: 1.4rem;
+            transition: all 0.3s;
+            position: absolute;
+            right: 10px;
+            z-index: 1;
         }
 
-        .video-item:last-child, .category-item:last-child {
+        .search-btn:hover {
+            color: var(--neon-pink);
+            transform: scale(1.1);
+        }
+
+        .search-input.active + .search-btn {
+            color: var(--neon-pink);
+        }
+
+        .profile-container {
+            position: relative;
+        }
+
+        .profile-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--neon-pink), var(--neon-purple));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
+        }
+
+        .profile-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px var(--neon-pink);
+        }
+
+        .profile-btn img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 55px;
+            right: 0;
+            background: var(--card-bg);
+            border-radius: 8px;
+            width: 220px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            z-index: 10;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .dropdown.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.95rem;
+        }
+
+        .dropdown-item:last-child {
             border-bottom: none;
         }
 
-        .video-item img, .category-item img {
-            width: 80px;
-            height: 50px;
-            object-fit: cover;
-            border-radius: 5px;
-            flex-shrink: 0;
+        .dropdown-item:hover {
+            background: rgba(138, 43, 226, 0.1);
         }
 
-        .video-details, .category-details {
-            flex-grow: 1;
-            min-width: 150px;
-        }
-
-        .video-details h3, .category-details h3 {
-            font-size: 1.1rem;
-            margin-bottom: 5px;
-            color: #ffffff;
-        }
-
-        .video-details p, .category-details p {
-            font-size: 0.9rem;
-            color: #b0b3c5;
-        }
-
-        .action-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 10px;
-            justify-content: center;
-            width: 100%;
-        }
-
-        .delete-btn, .edit-btn, .reset-views-btn, .reset-likes-btn {
-            background-color: #dc3545;
-            color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: background-color 0.3s, transform 0.3s;
-            flex-shrink: 0;
-            flex-basis: calc(50% - 5px);
-            max-width: calc(50% - 5px);
-            box-sizing: border-box;
-        }
-
-        .edit-btn {
-            background-color: #007bff;
-        }
-
-        .reset-views-btn {
-            background-color: #ffc107;
-            color: #333;
-        }
-
-        .reset-likes-btn {
-            background-color: #17a2b8;
-        }
-
-        .delete-btn:hover {
-            background-color: #c82333;
-            transform: translateY(-2px);
-        }
-
-        .edit-btn:hover {
-            background-color: #0056b3;
-            transform: translateY(-2px);
-        }
-
-        .reset-views-btn:hover {
-            background-color: #e0a800;
-            transform: translateY(-2px);
-        }
-
-        .reset-likes-btn:hover {
-            background-color: #138496;
-            transform: translateY(-2px);
-        }
-
-        .no-videos-message, .no-categories-message {
+        .dropdown-item i {
+            width: 24px;
             text-align: center;
-            padding: 20px;
-            color: #b0b3c5;
-            font-style: italic;
+            color: var(--neon-pink);
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: space-around;
+            padding: 1.5rem 5%;
+            background: rgba(8, 6, 16, 0.7);
+            border-bottom: 1px solid rgba(138, 43, 226, 0.1);
+        }
+
+        .tab {
+            flex-grow: 1;
+            padding: 0.8rem 1rem;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .tab i {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            transition: color 0.3s;
+        }
+
+        .tab.active, .tab:hover {
+            color: var(--text);
+            background: rgba(138, 43, 226, 0.15);
+        }
+
+        .tab.active i, .tab:hover i {
+            color: var(--neon-pink);
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 3px;
+            background: var(--neon-pink);
+            border-radius: 10px;
+            box-shadow: 0 0 10px var(--neon-pink);
+        }
+
+        .categories-section {
+            padding: 3rem 5%;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            margin-top: -30px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, var(--neon-pink), transparent);
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .category-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            border: 1px solid rgba(138, 43, 226, 0.1);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            width: 100%;
+            padding-top: 50%; 
+            position: relative; 
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 0 0 2px var(--neon-pink);
+        }
+
+        .category-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; 
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .category-card:hover .category-image {
+            opacity: 0.9;
+        }
+
+        .category-name {
+            position: absolute; 
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 1rem;
+            font-weight: 600;
+            font-size: 1.2rem;
+            z-index: 2;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            text-align: center; 
+        }
+
+        .video-section {
+            padding: 3rem 5%;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .video-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            border: 1px solid rgba(138, 43, 226, 0.1);
+            cursor: pointer;
+        }
+
+        .video-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 0 0 2px var(--neon-pink);
+        }
+
+        .video-thumb {
+            width: 100%;
+            padding-top: 56.25%; 
+            position: relative; 
+            overflow: hidden;
+        }
+
+        .video-thumb img {
+            position: absolute; 
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; 
+            transition: transform 0.5s;
+        }
+
+        .video-card:hover .video-thumb img {
+            transform: scale(1.1);
+        }
+
+        .video-duration {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            z-index: 2;
+        }
+
+        .play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            background: rgba(160, 32, 240, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .video-card:hover .play-btn {
+            opacity: 1;
+        }
+
+        .play-btn i {
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .video-info {
+            padding: 1.2rem;
+        }
+
+        .video-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            height: 3.2rem;
+            line-height: 1.4;
+        }
+
+        .video-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .video-views {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .video-likes {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: var(--neon-pink);
+        }
+
+        footer {
+            background: var(--darker-bg);
+            padding: 2rem 5%;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(138, 43, 226, 0.1);
+        }
+
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text);
+            text-shadow:
+                0 0 10px var(--neon-pink),
+                0 0 20px var(--neon-pink);
+        }
+
+        .copyright {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .disclaimer {
+            background: rgba(255, 87, 34, 0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 1024px) {
+            .video-grid, .categories-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 1.8rem;
+            }
+            
+            header {
+                padding: 1rem 3%; 
+                gap: 0.8rem;
+            }
+            
+            .tabs {
+                justify-content: space-around;
+                padding: 1rem 3%; 
+            }
+            
+            .tab {
+                padding: 0.7rem 0.5rem;
+                font-size: 0.9rem;
+                flex-shrink: 1;
+                gap: 0.3rem;
+            }
+
+            .tab i {
+                font-size: 0.9rem;
+            }
+            
+            .video-grid, .categories-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 1.5rem;
+            }
+            
+            .search-input.active {
+                width: calc(100% - 40px); 
+            }
+        }
+
+        @media (max-width: 576px) {
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            .header-right {
+                gap: 1rem;
+            }
+
+            .category-card {
+                padding-top: 45%; 
+            }
+            
+            .video-grid, .categories-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .age-gate-content {
+                padding: 2rem 1.5rem;
+            }
+            
+            .age-buttons {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .age-btn {
+                width: 100%;
+            }
+
+            .tab {
+                font-size: 0.8rem;
+                padding: 0.6rem 0.2rem;
+                gap: 0.2rem;
+            }
+
+            .tab i {
+                font-size: 0.8rem;
+            }
         }
 
         .custom-overlay {
@@ -281,8 +630,8 @@
         }
 
         .custom-box {
-            background-color: #1a1629;
-            color: #ffffff;
+            background-color: var(--card-bg);
+            color: var(--text);
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
@@ -290,10 +639,9 @@
             flex-direction: column;
             align-items: center;
             gap: 15px;
-            border: 1px solid #ff26b2;
+            border: 1px solid var(--neon-pink);
             width: 90%;
             max-width: 400px;
-            box-sizing: border-box;
         }
 
         .custom-box p {
@@ -302,7 +650,7 @@
         }
 
         .custom-box button {
-            background-color: #ff26b2;
+            background-color: var(--neon-pink);
             color: white;
             border: none;
             padding: 10px 20px;
@@ -336,798 +684,826 @@
             background-color: #777;
         }
 
-        #login-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 20px;
-            box-sizing: border-box;
+        .heart-animation-container {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            max-width: 480px;
-            margin: 0 auto;
-        }
-
-        #login-section h1 {
-            margin-bottom: 20px;
-        }
-
-        #login-section button {
-            background: linear-gradient(45deg, #8a2be2, #ff00ff);
-            color: white;
-            padding: 8px 20px;
-            border-radius: 10px;
-            font-size: 1.2rem;
+            height: 100%;
             display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            height: 10vh;
-            width: 100%;
             justify-content: center;
-            max-width: 250px;
-        }
-
-        #login-section button:hover {
-            background: linear-gradient(45deg, #9932cc, #ee00ee);
-            transform: translateY(-2px);
-        }
-
-        #login-section .google-icon {
-            width: 24px;
-            height: 24px;
-        }
-
-        #admin-content {
+            align-items: center;
+            pointer-events: none;
+            z-index: 5;
             display: none;
-            width: 100%;
-            max-width: 480px;
-            margin-top: 30px;
-            box-sizing: border-box;
         }
 
-        #auth-status {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background-color: rgba(26, 22, 41, 0.8);
-            padding: 10px 15px;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            color: #b0b3c5;
-            z-index: 1001;
-            left: 50%;
-            transform: translateX(-50%);
-            width: calc(100% - 40px);
-            max-width: 460px;
-            justify-content: center;
-            flex-wrap: wrap;
-            top: 10px;
-            box-sizing: border-box;
+        .animated-heart {
+            font-size: 5rem;
+            color: var(--neon-pink);
+            opacity: 0;
+            transform: scale(0);
+            filter: drop-shadow(0 0 15px var(--neon-pink));
         }
 
-        #auth-status .user-email {
-            font-weight: 600;
-            color: #ff26b2;
-            text-align: center;
-            flex-basis: 100%;
-            margin-bottom: 5px;
+        .animated-heart.animate-heart {
+            animation: heartPopFade 0.7s ease-out forwards;
         }
 
-        #auth-status button {
-            padding: 8px 15px;
-            font-size: 0.9rem;
-            border-radius: 20px;
-            background-color: #dc3545;
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            flex-grow: 1;
-            max-width: 150px;
+        @keyframes heartPopFade {
+            0% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1.2); }
+            100% { opacity: 0; transform: scale(1); }
         }
-
-        #auth-status button:hover {
-            background-color: #c82333;
-        }
-
-        @media (max-width: 480px) {
-            body {
-                padding-top: 30%;
-            }
-            .container, .video-list-container, .category-list-container {
-                padding: 10px;
-                margin-top: 20px;
-                margin-bottom: 20px;
-            }
-            h1, h2 {
-                font-size: 2rem;
-            }
-            .button-group button {
-                width: 100%;
-                min-width: unset;
-            }
-            .video-item, .category-item {
-                flex-direction: column;
-                align-items: flex-start;
-                text-align: left;
-                padding: 10px;
-            }
-            .video-item img, .category-item img {
-                margin-bottom: 10px;
-            }
-            .action-buttons {
-                flex-direction: column;
-                width: 100%;
-                margin-top: 10px;
-            }
-            .delete-btn, .edit-btn, .reset-views-btn, .reset-likes-btn {
-                width: 100%;
-                max-width: unset;
-                margin-top: 5px;
-            }
-            .custom-box {
-                padding: 15px;
-            }
-            #auth-status {
-                width: calc(100% - 20px);
-                padding: 8px 10px;
-            }
-        </style>
+    </style>
 </head>
 <body>
-    <div id="auth-status" style="display:none;">
-        Logged in as: <span class="user-email" id="user-email"></span>
-        <button id="sign-out-btn">Sign Out</button>
-    </div>
-
-    <div id="login-section">
-        <h1>Admin Access Required</h1>
-        <p>Please sign in with your authorized Google account to access the administration panel.</p>
-        <button id="sign-in-google-btn">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google icon" class="google-icon">
-            Sign In with Google
-        </button>
-        <p id="auth-error-message" style="color: #dc3545; margin-top: 20px; display: none;"></p>
-    </div>
-
-    <div id="admin-content">
-        <div class="container">
-            <h1 id="video-form-title">Add New Video Content</h1>
-            <form id="video-form">
-                <div class="form-group">
-                    <label for="videoTitle">Video Title:</label>
-                    <input type="text" id="videoTitle" required placeholder="e.g., Passionate Encounter - Late Night Session">
-                </div>
-                <div class="form-group">
-                    <label for="thumbnailUrl">Thumbnail Image URL:</label>
-                    <input type="text" id="thumbnailUrl" required placeholder="e.g., https://example.com/thumb.jpg">
-                </div>
-                <div class="form-group">
-                    <label for="videoUrl">Video Play URL (e.g., YouTube video link):</label>
-                    <input type="text" id="videoUrl" required placeholder="e.e.g., https://www.youtube.com/watch?v=dQw4w9WgXcQ">
-                </div>
-                <div class="form-group">
-                    <label for="videoDuration">Duration (e.g., 22:15):</label>
-                    <input type="text" id="videoDuration" required placeholder="e.g., 22:15">
-                </div>
-                <div class="form-group">
-                    <label for="videoCategory">Category:</label>
-                    <select id="videoCategory" required>
-                        <option value="">-- Select a Category --</option>
-                        </select>
-                </div>
-                <div class="button-group">
-                    <button type="submit" class="submit-btn" id="video-submit-btn"><i class="fas fa-plus-circle"></i> Add Video</button>
-                    <button type="button" class="clear-btn" id="clear-video-form-btn"><i class="fas fa-eraser"></i> Clear Form</button>
-                    <button type="button" class="cancel-edit-btn" id="cancel-video-edit-btn" style="display:none;"><i class="fas fa-times-circle"></i> Cancel Edit</button>
-                </div>
-            </form>
-        </div>
-
-        <div class="container">
-            <h1 id="category-form-title">Add New Category</h1>
-            <form id="category-form">
-                <div class="form-group">
-                    <label for="categoryName">Category Name:</label>
-                    <input type="text" id="categoryName" required placeholder="e.g., Anal, Asian, Blowjob">
-                </div>
-                <div class="form-group">
-                    <label for="categoryThumbnailUrl">Category Thumbnail URL:</label>
-                    <input type="text" id="categoryThumbnailUrl" required placeholder="e.g., https://example.com/category_thumb.jpg">
-                </div>
-                <div class="button-group">
-                    <button type="submit" class="submit-btn" id="category-submit-btn"><i class="fas fa-plus-circle"></i> Add Category</button>
-                    <button type="button" class="clear-btn" id="clear-category-form-btn"><i class="fas fa-eraser"></i> Clear Form</button>
-                    <button type="button" class="cancel-edit-btn" id="cancel-category-edit-btn" style="display:none;"><i class="fas fa-times-circle"></i> Cancel Edit</button>
-                </div>
-            </form>
-        </div>
-
-        <div class="category-list-container">
-            <h2>Manage Existing Categories</h2>
-            <div id="admin-category-list">
-                <div class="no-categories-message" id="no-admin-categories">
-                    <i class="fas fa-info-circle"></i> No categories added yet.
-                </div>
+    <header>
+        <div class="header-top-row">
+            <div class="logo">
+                <a href="admin.html" style="text-decoration: none; color: inherit;">
+                    <i class="fas fa-fire"></i> XXX Git
+                </a>
+                <span class="warning-badge">18+</span>
             </div>
-        </div>
-
-        <div class="video-list-container">
-            <h2>Manage Existing Videos</h2>
-            <div id="admin-video-list">
-                <div class="no-videos-message" id="no-admin-videos">
-                    <i class="fas fa-info-circle"></i> No videos added yet.
+            <div class="profile-container">
+                <div class="profile-btn" id="profile-btn">
+                    <i class="fas fa-user" id="profile-icon"></i>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="message-box" class="message-box"></div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyAsZ-nw5UgKRotI2_Kgb9V-BFXS3JoX7UU",
-            authDomain: "xxx-git.firebaseapp.com",
-            projectId: "xxx-git",
-            storageBucket: "xxx-git.firebasestorage.app",
-            messagingSenderId: "1097384679265",
-            appId: "1:1097384679265:web:3969c888f193b42f8bd720",
-            measurementId: "G-TFJW56LFKV"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-        const provider = new GoogleAuthProvider();
-
-        const ADMIN_UID = 'aftLs2g87NUlfXTFBa0z2nFfQuu2'; 
-        const ADMIN_EMAIL = 'gitxnxx@gmail.com';
-
-        const loginSection = document.getElementById('login-section');
-        const adminContent = document.getElementById('admin-content');
-        const signInGoogleBtn = document.getElementById('sign-in-google-btn');
-        const signOutBtn = document.getElementById('sign-out-btn');
-        const userEmailSpan = document.getElementById('user-email');
-        const authStatusDiv = document.getElementById('auth-status');
-        const authErrorMessage = document.getElementById('auth-error-message');
-
-        onAuthStateChanged(auth, (user) => {
-            if (user && user.uid === ADMIN_UID && user.email === ADMIN_EMAIL) {
-                loginSection.style.display = 'none';
-                adminContent.style.display = 'block';
-                authStatusDiv.style.display = 'flex';
-                userEmailSpan.textContent = user.email;
-                authErrorMessage.style.display = 'none';
-
-                fetchAndDisplayAdminVideos();
-                fetchAndDisplayAdminCategories();
-                populateCategoryDropdown();
-                showMessage("Admin access granted. Welcome!", 'success');
-            } else {
-                loginSection.style.display = 'flex';
-                adminContent.style.display = 'none';
-                authStatusDiv.style.display = 'none';
-                userEmailSpan.textContent = '';
-                if (user) {
-                    authErrorMessage.textContent = `You are signed in as ${user.email}, but not authorized to access this admin panel.`;
-                    authErrorMessage.style.display = 'block';
-                    showMessage("Authorization failed. Please use an authorized account.", 'error');
-                } else {
-                    authErrorMessage.textContent = "";
-                    authErrorMessage.style.display = 'none';
-                }
-            }
-        });
-
-        signInGoogleBtn.addEventListener('click', async () => {
-            try {
-                await signInWithPopup(auth, provider);
-            } catch (error) {
-                console.error("Error during Google sign-in:", error);
-                authErrorMessage.textContent = `Sign-in failed: ${error.message}`;
-                authErrorMessage.style.display = 'block';
-                showMessage("Google sign-in failed. Please try again.", 'error');
-            }
-        });
-
-        signOutBtn.addEventListener('click', async () => {
-            try {
-                await signOut(auth);
-                showMessage("Signed out successfully.", 'success');
-            } catch (error) {
-                console.error("Error during sign-out:", error);
-                showMessage("Error signing out: " + error.message, 'error');
-            }
-        });
-
-        const videoForm = document.getElementById('video-form');
-        const videoFormTitle = document.getElementById('video-form-title');
-        const videoSubmitBtn = document.getElementById('video-submit-btn');
-        const clearVideoFormBtn = document.getElementById('clear-video-form-btn');
-        const cancelVideoEditBtn = document.getElementById('cancel-video-edit-btn');
-        const messageBox = document.getElementById('message-box');
-        const adminVideoList = document.getElementById('admin-video-list');
-        const noAdminVideosMessage = document.getElementById('no-admin-videos');
-        const videoCategorySelect = document.getElementById('videoCategory');
-
-        const categoryForm = document.getElementById('category-form');
-        const categoryFormTitle = document.getElementById('category-form-title');
-        const categorySubmitBtn = document.getElementById('category-submit-btn');
-        const clearCategoryFormBtn = document.getElementById('clear-category-form-btn');
-        const cancelCategoryEditBtn = document.getElementById('cancel-category-edit-btn');
-        const adminCategoryList = document.getElementById('admin-category-list');
-        const noAdminCategoriesMessage = document.getElementById('no-admin-categories');
-
-        let editingVideoId = null;
-        let editingCategoryId = null;
-
-        function showMessage(message, type = 'success') {
-            messageBox.textContent = message;
-            messageBox.className = 'message-box show';
-            if (type === 'error') {
-                messageBox.classList.add('error');
-            } else {
-                messageBox.classList.remove('error');
-            }
-            setTimeout(() => {
-                messageBox.classList.remove('show');
-            }, 3000);
-        }
-
-        function showCustomMessage(message) {
-            const overlay = document.createElement('div');
-            overlay.classList.add('custom-overlay');
-            overlay.innerHTML = `
-                <div class="custom-box">
-                    <p>${message}</p>
-                    <button>OK</button>
-                </div>
-            `;
-            document.body.appendChild(overlay);
-            overlay.querySelector('button').addEventListener('click', () => {
-                document.body.removeChild(overlay);
-            });
-        }
-
-        function showCustomPrompt(message, callback) {
-            const overlay = document.createElement('div');
-            overlay.classList.add('custom-overlay');
-            overlay.innerHTML = `
-                <div class="custom-box">
-                    <p>${message}</p>
-                    <div class="custom-prompt-buttons">
-                        <button class="yes-btn">Yes</button>
-                        <button class="no-btn">No</button>
+                <div class="dropdown">
+                    <div class="dropdown-item" id="user-display-info" style="display: none;">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="current-user-name"></span>
+                    </div>
+                    <div class="dropdown-item" id="google-login">
+                        <i class="fab fa-google"></i>
+                        <span>Log in with Google</span>
+                    </div>
+                    <div class="dropdown-item" id="guest-login">
+                        <i class="fas fa-user-clock"></i>
+                        <span>Log in with Guest Account</span>
+                    </div>
+                    <div class="dropdown-item" id="logout-button" style="display: none;">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
                     </div>
                 </div>
-            `;
-            document.body.appendChild(overlay);
+            </div>
+        </div>
+        <div class="search-container">
+            <input type="text" class="search-input" id="search-input" placeholder="Search videos or categories...">
+            <button class="search-btn" id="search-toggle-btn">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </header>
 
-            const yesBtn = overlay.querySelector('.yes-btn');
-            const noBtn = overlay.querySelector('.no-btn');
+    <div class="tabs">
+        <button class="tab active" data-tab="home"><i class="fas fa-home"></i> Home</button>
+        <button class="tab" data-tab="categories"><i class="fas fa-tags"></i> Categories</button>
+        <button class="tab" data-tab="favourite"><i class="fas fa-heart"></i> Favourite</button>
+        <button class="tab" data-tab="premium"><i class="fas fa-crown"></i> Premium</button>
+    </div>
 
-            yesBtn.addEventListener('click', () => {
-                document.body.removeChild(overlay);
-                callback(true);
-            });
+    <section class="categories-section" id="categories-content" style="display:none;">
+        <h2 class="section-title">Categories</h2>
+        <div class="categories-grid" id="dynamic-categories-grid">
+            <div class="placeholder-message" id="loading-categories">
+                <i class="fas fa-spinner fa-spin" style="font-size: 4rem; color: var(--neon-pink); margin-bottom: 1rem;"></i>
+                <h3>Loading Categories...</h3>
+                <p>Please wait while we fetch the categories.</p>
+            </div>
+            <div class="placeholder-message" id="no-categories" style="display:none;">
+                <i class="fas fa-tags" style="font-size: 4rem; color: var(--neon-pink); margin-bottom: 1rem;"></i>
+                <h3>No categories added yet.</h3>
+                <p>Visit the admin panel to add some categories.</p>
+            </div>
+        </div>
+    </section>
 
-            noBtn.addEventListener('click', () => {
-                document.body.removeChild(overlay);
-                callback(false);
-            });
+    <section class="video-section" id="home-content">
+        <h2 class="section-title" id="video-section-title">Latest Videos</h2>
+        <div class="video-grid" id="dynamic-video-grid">
+            <div class="placeholder-message" id="loading-videos">
+                <i class="fas fa-spinner fa-spin" style="font-size: 4rem; color: var(--neon-pink); margin-bottom: 1rem;"></i>
+                <h3>Loading Videos...</h3>
+                <p>Please wait while we fetch the videos.</p>
+            </div>
+            <div class="placeholder-message" id="no-videos" style="display:none;">
+                <i class="fas fa-video" style="font-size: 4rem; color: var(--neon-pink); margin-bottom: 1rem;"></i>
+                <h3>No videos added yet.</h3>
+                <p>Visit the admin panel to add some videos.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-logo">XXX GIT</div>
+        <p class="copyright">
+            © 2024 XXX GIT. All rights reserved. <br>
+            Disclaimer: This site contains content of a mature nature and is intended for adults 18 years or older. By accessing this site, you are affirming that you are of legal age in your jurisdiction to view such content.
+        </p>
+        <p class="disclaimer">
+            This website is for educational and demonstrative purposes only. All content is fictitious and used for illustrative purposes. No real content is hosted or promoted.
+        </p>
+    </footer>
+
+    <div id="age-gate-overlay" class="custom-overlay" style="display:none;">
+        <div class="custom-box age-gate-content">
+            <p>You must be 18 years or older to access this content.</p>
+            <div class="custom-prompt-buttons age-buttons">
+                <button id="age-confirm-btn" class="age-btn">I am 18 or older</button>
+                <button id="age-decline-btn" class="age-btn no-btn">Exit</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="video-modal-overlay" class="custom-overlay" style="display:none;">
+        <div class="custom-box" style="max-width: 900px; width: 90%;">
+            <h2 id="video-modal-title" style="color: var(--neon-pink); margin-bottom: 15px;"></h2>
+            <div class="video-player-container" style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; background: #000;">
+                <iframe id="video-modal-iframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+            </div>
+            <p id="video-modal-description" style="color: var(--text-secondary); margin-top: 15px; text-align: center;"></p>
+            <div style="display: flex; gap: 15px; margin-top: 20px;">
+                <button id="like-button" style="background-color: #fe2a66; display: flex; align-items: center; gap: 5px;"><i class="fas fa-heart"></i> <span id="like-count">0</span> Likes</button>
+                <button id="close-video-modal" style="background-color: #555;">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="search-results-overlay" class="custom-overlay" style="display:none;">
+        <div class="custom-box" style="max-width: 900px; width: 90%;">
+            <h2 style="color: var(--neon-pink); margin-bottom: 15px;">Search Results</h2>
+            <div id="search-results-content" style="width: 100%;">
+                <div id="search-video-results" class="video-grid" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));"></div>
+                <div id="search-category-results" class="categories-grid" style="grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); margin-top: 30px;"></div>
+                <p id="no-search-results" style="display:none; text-align: center; color: var(--text-secondary); margin-top: 20px;">No results found.</p>
+            </div>
+            <button id="close-search-results" style="background-color: #555; margin-top: 20px;">Close</button>
+        </div>
+    </div>
+
+    <div class="heart-animation-container" id="heart-animation-container">
+        <i class="fas fa-heart animated-heart" id="animated-heart"></i>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+        import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, arrayUnion, arrayRemove, query, orderBy, where } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
+
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const ageGateOverlay = document.getElementById('age-gate-overlay');
+        const ageConfirmBtn = document.getElementById('age-confirm-btn');
+        const ageDeclineBtn = document.getElementById('age-decline-btn');
+        const videoModalOverlay = document.getElementById('video-modal-overlay');
+        const videoModalTitle = document.getElementById('video-modal-title');
+        const videoModalIframe = document.getElementById('video-modal-iframe');
+        const videoModalDescription = document.getElementById('video-modal-description');
+        const closeVideoModalBtn = document.getElementById('close-video-modal');
+        const likeButton = document.getElementById('like-button');
+        const likeCountSpan = document.getElementById('like-count');
+        const heartAnimationContainer = document.getElementById('heart-animation-container');
+        const animatedHeart = document.getElementById('animated-heart');
+
+        const categoriesContent = document.getElementById('categories-content');
+        const homeContent = document.getElementById('home-content');
+        const dynamicCategoriesGrid = document.getElementById('dynamic-categories-grid');
+        const dynamicVideoGrid = document.getElementById('dynamic-video-grid');
+        const loadingCategories = document.getElementById('loading-categories');
+        const noCategories = document.getElementById('no-categories');
+        const loadingVideos = document.getElementById('loading-videos');
+        const noVideos = document.getElementById('no-videos');
+
+        const searchInput = document.getElementById('search-input');
+        const searchToggleBtn = document.getElementById('search-toggle-btn');
+        const searchResultsOverlay = document.getElementById('search-results-overlay');
+        const searchVideoResults = document.getElementById('search-video-results');
+        const searchCategoryResults = document.getElementById('search-category-results');
+        const noSearchResults = document.getElementById('no-search-results');
+        const closeSearchResultsBtn = document.getElementById('close-search-results');
+
+        let currentPlayingVideoId = null; 
+
+        // Age Gate Logic
+        const hasConfirmedAge = localStorage.getItem('ageConfirmed');
+
+        if (!hasConfirmedAge) {
+            ageGateOverlay.style.display = 'flex';
+        } else {
+            initializeContent();
         }
 
-        function resetVideoForm() {
-            videoForm.reset();
-            editingVideoId = null;
-            videoFormTitle.textContent = 'Add New Video Content';
-            videoSubmitBtn.innerHTML = '<i class="fas fa-plus-circle"></i> Add Video';
-            cancelVideoEditBtn.style.display = 'none';
+        ageConfirmBtn.addEventListener('click', () => {
+            localStorage.setItem('ageConfirmed', 'true');
+            ageGateOverlay.style.display = 'none';
+            initializeContent();
+        });
+
+        ageDeclineBtn.addEventListener('click', () => {
+            window.location.href = "about:blank"; // Redirects to a blank page
+        });
+
+        function initializeContent() {
+            // Initial content loading
+            fetchCategories();
+            fetchVideos();
         }
 
-        videoForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const videoTitle = document.getElementById('videoTitle').value;
-            const thumbnailUrl = document.getElementById('thumbnailUrl').value;
-            const videoUrl = document.getElementById('videoUrl').value;
-            const videoDuration = document.getElementById('videoDuration').value;
-            const videoCategory = videoCategorySelect.value;
-            
-            const initialViews = "0";
-            const initialLikes = "0";
-            const initialDescription = "No description available.";
-
-            const videoData = {
-                title: videoTitle,
-                thumbnail: thumbnailUrl,
-                url: videoUrl,
-                duration: videoDuration,
-                description: initialDescription,
-                category: videoCategory,
-            };
-
-            if (editingVideoId) {
-                try {
-                    await updateDoc(doc(db, "public_videos", editingVideoId), {
-                        title: videoData.title,
-                        thumbnail: videoData.thumbnail,
-                        url: videoData.url,
-                        duration: videoData.duration,
-                        category: videoData.category
-                    });
-                    showMessage("Video updated successfully!");
-                    console.log("Document updated with ID: ", editingVideoId);
-                } catch (e) {
-                    console.error("Error updating document: ", e);
-                    showMessage("Error updating video: " + e.message, 'error');
-                }
-            } else {
-                try {
-                    const docRef = await addDoc(collection(db, "public_videos"), {
-                        ...videoData,
-                        views: initialViews,
-                        likes: initialLikes,
-                        createdAt: new Date()
-                    });
-                    showMessage("Video added successfully!");
-                    console.log("Document written with ID: ", docRef.id);
-                } catch (e) {
-                    console.error("Error adding document: ", e);
-                    showMessage("Error adding video: " + e.message, 'error');
-                }
-            }
-            resetVideoForm();
-            fetchAndDisplayAdminVideos();
-        });
-
-        clearVideoFormBtn.addEventListener('click', () => {
-            resetVideoForm();
-            showMessage("Video form cleared.");
-        });
-
-        cancelVideoEditBtn.addEventListener('click', () => {
-            resetVideoForm();
-            showMessage("Video edit cancelled.");
-        });
-
-        async function fetchAndDisplayAdminVideos() {
-            adminVideoList.innerHTML = '';
-            noAdminVideosMessage.style.display = 'none';
+        async function fetchCategories() {
+            loadingCategories.style.display = 'flex';
+            noCategories.style.display = 'none';
+            dynamicCategoriesGrid.innerHTML = ''; 
 
             try {
-                const publicVideosRef = collection(db, 'public_videos');
-                const querySnapshot = await getDocs(publicVideosRef);
-
+                // Modified query to order by isPinned (true first)
+                const q = query(collection(db, 'categories'), orderBy('isPinned', 'desc'), orderBy('name', 'asc'));
+                const querySnapshot = await getDocs(q);
+                
                 if (querySnapshot.empty) {
-                    noAdminVideosMessage.style.display = 'block';
+                    loadingCategories.style.display = 'none';
+                    noCategories.style.display = 'flex';
                     return;
                 }
 
-                let videos = [];
                 querySnapshot.forEach((doc) => {
-                    videos.push({ id: doc.id, ...doc.data() });
+                    const category = doc.data();
+                    const categoryCard = document.createElement('div');
+                    categoryCard.classList.add('category-card');
+                    categoryCard.innerHTML = `
+                        <img src="${category.imageUrl || 'https://via.placeholder.com/250x150?text=No+Image'}" alt="${category.name}" class="category-image">
+                        <div class="category-name">${category.name}</div>
+                    `;
+                    categoryCard.addEventListener('click', () => {
+                        filterVideosByCategory(category.name);
+                    });
+                    dynamicCategoriesGrid.appendChild(categoryCard);
                 });
+                loadingCategories.style.display = 'none';
+            } catch (error) {
+                console.error("Error fetching categories: ", error);
+                loadingCategories.style.display = 'none';
+                noCategories.style.display = 'flex';
+                noCategories.querySelector('h3').textContent = 'Error loading categories.';
+                noCategories.querySelector('p').textContent = 'Please try again later.';
+            }
+        }
 
-                videos.sort((a, b) => {
-                    const dateA = a.createdAt ? a.createdAt.toDate() : new Date(0);
-                    const dateB = b.createdAt ? b.createdAt.toDate() : new Date(0);
-                    return dateB - dateA;
-                });
+        async function fetchVideos(category = null) {
+            loadingVideos.style.display = 'flex';
+            noVideos.style.display = 'none';
+            dynamicVideoGrid.innerHTML = ''; 
+            document.getElementById('video-section-title').textContent = category ? `${category} Videos` : 'Latest Videos';
 
-                videos.forEach((video) => {
-                    const videoItem = document.createElement('div');
-                    videoItem.classList.add('video-item');
-                    videoItem.setAttribute('data-video-id', video.id);
+            try {
+                let q;
+                if (category) {
+                    q = query(collection(db, 'videos'), where('category', '==', category), orderBy('isPinned', 'desc'), orderBy('timestamp', 'desc'));
+                } else {
+                    // Modified query to order by isPinned (true first) then by timestamp
+                    q = query(collection(db, 'videos'), orderBy('isPinned', 'desc'), orderBy('timestamp', 'desc'));
+                }
+                const querySnapshot = await getDocs(q);
 
-                    videoItem.innerHTML = `
-                        <img src="${video.thumbnail}" alt="Thumbnail" onerror="this.onerror=null; this.src='https://placehold.co/80x50/0f0c1d/ffffff?text=No+Image'">
-                        <div class="video-details">
-                            <h3>${video.title}</h3>
-                            <p>Category: ${video.category || 'N/A'}</p>
-                            <p>Duration: ${video.duration} | Views: ${video.views} | Likes: ${video.likes}</p>
+                if (querySnapshot.empty) {
+                    loadingVideos.style.display = 'none';
+                    noVideos.style.display = 'flex';
+                    noVideos.querySelector('h3').textContent = category ? `No videos found in ${category} category.` : 'No videos added yet.';
+                    noVideos.querySelector('p').textContent = category ? 'Please check back later or select another category.' : 'Visit the admin panel to add some videos.';
+                    return;
+                }
+
+                querySnapshot.forEach((doc) => {
+                    const video = doc.data();
+                    const videoId = doc.id;
+                    const videoCard = document.createElement('div');
+                    videoCard.classList.add('video-card');
+                    videoCard.innerHTML = `
+                        <div class="video-thumb">
+                            <img src="${video.thumbnailUrl}" alt="${video.title}">
+                            <span class="video-duration">${video.duration}</span>
+                            <div class="play-btn"><i class="fas fa-play"></i></div>
                         </div>
-                        <div class="action-buttons">
-                            <button class="edit-btn" data-id="${video.id}" data-title="${video.title}" 
-                                data-thumbnail="${video.thumbnail}" data-url="${video.url}" 
-                                data-duration="${video.duration}" data-category="${video.category}">
-                                <i class="fas fa-edit"></i> Edit
-                            </button>
-                            <button class="reset-views-btn" data-id="${video.id}" data-title="${video.title}"><i class="fas fa-eye-slash"></i> Reset Views</button>
-                            <button class="reset-likes-btn" data-id="${video.id}" data-title="${video.title}"><i class="fas fa-thumbs-down"></i> Reset Likes</button>
-                            <button class="delete-btn" data-id="${video.id}"><i class="fas fa-trash"></i> Delete</button>
+                        <div class="video-info">
+                            <h3>${video.title}</h3>
+                            <div class="video-meta">
+                                <span class="video-views"><i class="fas fa-eye"></i> ${video.views || 0}</span>
+                                <span class="video-likes"><i class="fas fa-heart"></i> ${video.likes || 0}</span>
+                            </div>
                         </div>
                     `;
-                    adminVideoList.appendChild(videoItem);
-                });
-
-                adminVideoList.querySelectorAll('.delete-btn').forEach(button => {
-                    button.addEventListener('click', (e) => {
-                        const videoIdToDelete = e.currentTarget.getAttribute('data-id');
-                        showCustomPrompt(`Are you sure you want to delete "${e.currentTarget.closest('.video-item').querySelector('h3').textContent}"? This action cannot be undone.`, (response) => {
-                            if (response) {
-                                deleteVideo(videoIdToDelete);
-                            }
-                        });
+                    videoCard.addEventListener('click', () => {
+                        openVideoModal(videoId, video);
                     });
+                    dynamicVideoGrid.appendChild(videoCard);
                 });
-
-                adminVideoList.querySelectorAll('.edit-btn').forEach(button => {
-                    button.addEventListener('click', (e) => {
-                        editingVideoId = e.currentTarget.getAttribute('data-id');
-                        document.getElementById('videoTitle').value = e.currentTarget.getAttribute('data-title');
-                        document.getElementById('thumbnailUrl').value = e.currentTarget.getAttribute('data-thumbnail');
-                        document.getElementById('videoUrl').value = e.currentTarget.getAttribute('data-url');
-                        document.getElementById('videoDuration').value = e.currentTarget.getAttribute('data-duration');
-                        videoCategorySelect.value = e.currentTarget.getAttribute('data-category').toLowerCase();
-                        
-                        videoFormTitle.textContent = 'Edit Video Content';
-                        videoSubmitBtn.innerHTML = '<i class="fas fa-save"></i> Update Video';
-                        cancelVideoEditBtn.style.display = 'inline-block';
-                        showMessage("Editing video: " + e.currentTarget.getAttribute('data-title'));
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                    });
-                });
-
-                adminVideoList.querySelectorAll('.reset-views-btn').forEach(button => {
-                    button.addEventListener('click', (e) => {
-                        const videoIdToResetViews = e.currentTarget.getAttribute('data-id');
-                        const videoTitle = e.currentTarget.getAttribute('data-title');
-                        showCustomPrompt(`Are you sure you want to reset views for "${videoTitle}" to 0?`, (response) => {
-                            if (response) {
-                                resetVideoViews(videoIdToResetViews, videoTitle);
-                            }
-                        });
-                    });
-                });
-
-                adminVideoList.querySelectorAll('.reset-likes-btn').forEach(button => {
-                    button.addEventListener('click', (e) => {
-                        const videoIdToResetLikes = e.currentTarget.getAttribute('data-id');
-                        const videoTitle = e.currentTarget.getAttribute('data-title');
-                        showCustomPrompt(`Are you sure you want to reset likes for "${videoTitle}" to 0?`, (response) => {
-                            if (response) {
-                                resetVideoLikes(videoIdToResetLikes, videoTitle);
-                            }
-                        });
-                    });
-                });
-
+                loadingVideos.style.display = 'none';
             } catch (error) {
-                console.error("Error fetching admin videos: ", error);
-                adminVideoList.innerHTML = `
-                    <div class="no-videos-message" style="color: #dc3545;">
-                        <i class="fas fa-exclamation-circle"></i> Error loading videos.
-                    </div>
-                `;
+                console.error("Error fetching videos: ", error);
+                loadingVideos.style.display = 'none';
+                noVideos.style.display = 'flex';
+                noVideos.querySelector('h3').textContent = 'Error loading videos.';
+                noVideos.querySelector('p').textContent = 'Please try again later.';
             }
         }
 
-        async function deleteVideo(videoId) {
-            try {
-                await deleteDoc(doc(db, "public_videos", videoId));
-                showMessage("Video deleted successfully!");
-                console.log("Document successfully deleted with ID:", videoId);
-                fetchAndDisplayAdminVideos();
-            } catch (error) {
-                console.error("Error deleting document: ", error);
-                showMessage("Error deleting video: " + error.message, 'error');
+        async function openVideoModal(videoId, videoData) {
+            currentPlayingVideoId = videoId;
+            videoModalTitle.textContent = videoData.title;
+            videoModalIframe.src = videoData.videoUrl; 
+            videoModalDescription.textContent = videoData.description || 'No description available.';
+            likeCountSpan.textContent = videoData.likes || 0; 
+            videoModalOverlay.style.display = 'flex';
+
+            // Check if user has liked this video
+            const user = auth.currentUser;
+            if (user && !user.isAnonymous) {
+                const userDocRef = doc(db, 'users', user.uid);
+                const userDocSnap = await getDoc(userDocRef);
+                if (userDocSnap.exists() && userDocSnap.data().favorites && userDocSnap.data().favorites.includes(videoId)) {
+                    likeButton.classList.add('liked');
+                } else {
+                    likeButton.classList.remove('liked');
+                }
+            } else {
+                likeButton.classList.remove('liked');
             }
+
+            // Update video views
+            const videoRef = doc(db, 'videos', videoId);
+            await updateDoc(videoRef, {
+                views: (videoData.views || 0) + 1
+            });
+            // Re-fetch videos to update view count on display, or just update the displayed count directly if preferred
+            // fetchVideos(); 
         }
 
-        async function resetVideoViews(videoId, videoTitle) {
-            try {
-                await updateDoc(doc(db, "public_videos", videoId), {
-                    views: "0"
-                });
-                showMessage(`Views for "${videoTitle}" reset to 0!`);
-                console.log(`Views for video ID: ${videoId} reset to 0.`);
-                fetchAndDisplayAdminVideos();
-            } catch (error) {
-                console.error("Error resetting views: ", error);
-                showMessage(`Error resetting views for "${videoTitle}": ` + error.message, 'error');
-            }
-        }
+        closeVideoModalBtn.addEventListener('click', () => {
+            videoModalOverlay.style.display = 'none';
+            videoModalIframe.src = ''; 
+            currentPlayingVideoId = null;
+        });
 
-        async function resetVideoLikes(videoId, videoTitle) {
-            try {
-                await updateDoc(doc(db, "public_videos", videoId), {
-                    likes: "0"
-                });
-                showMessage(`Likes for "${videoTitle}" reset to 0!`);
-                console.log(`Likes for video ID: ${videoId} reset to 0.`);
-                fetchAndDisplayAdminVideos();
-            } catch (error) {
-                console.error("Error resetting likes: ", error);
-                showMessage(`Error resetting likes for "${videoTitle}": ` + error.message, 'error');
-            }
-        }
-
-        function resetCategoryForm() {
-            categoryForm.reset();
-            editingCategoryId = null;
-            categoryFormTitle.textContent = 'Add New Category';
-            categorySubmitBtn.innerHTML = '<i class="fas fa-plus-circle"></i> Add Category';
-            cancelCategoryEditBtn.style.display = 'none';
-        }
-
-        categoryForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const categoryName = document.getElementById('categoryName').value.trim();
-            const categoryThumbnailUrl = document.getElementById('categoryThumbnailUrl').value.trim();
-
-            if (!categoryName || !categoryThumbnailUrl) {
-                showMessage("Category name and thumbnail URL cannot be empty.", 'error');
+        likeButton.addEventListener('click', async () => {
+            const user = auth.currentUser;
+            if (!user) {
+                alert('Please log in to like videos.');
                 return;
             }
 
-            if (editingCategoryId) {
-                try {
-                    await updateDoc(doc(db, "categories", editingCategoryId), {
-                        name: categoryName,
-                        thumbnail: categoryThumbnailUrl
-                    });
-                    showMessage("Category updated successfully!");
-                    console.log("Category updated with ID: ", editingCategoryId);
-                } catch (e) {
-                    console.error("Error updating category: ", e);
-                    showMessage("Error updating category: " + e.message, 'error');
-                }
-            } else {
-                try {
-                    const categoriesRef = collection(db, "categories");
-                    const querySnapshot = await getDocs(categoriesRef);
-                    const existingCategories = querySnapshot.docs.map(doc => doc.data().name.toLowerCase());
+            if (user.isAnonymous) {
+                alert('Guest users cannot like videos. Please log in with Google.');
+                return;
+            }
 
-                    if (existingCategories.includes(categoryName.toLowerCase())) {
-                        showMessage("Category already exists!", 'error');
+            if (currentPlayingVideoId) {
+                const videoRef = doc(db, 'videos', currentPlayingVideoId);
+                const userDocRef = doc(db, 'users', user.uid);
+
+                try {
+                    const videoDoc = await getDoc(videoRef);
+                    if (!videoDoc.exists()) {
+                        console.error("Video document not found!");
                         return;
                     }
 
-                    await addDoc(categoriesRef, { 
-                        name: categoryName, 
-                        thumbnail: categoryThumbnailUrl,
-                        createdAt: new Date() 
-                    });
-                    showMessage("Category added successfully!");
-                    console.log("Category added with name: ", categoryName);
-                } catch (e) {
-                    console.error("Error adding category: ", e);
-                    showMessage("Error adding category: " + e.message, 'error');
+                    const videoData = videoDoc.data();
+                    let currentLikes = videoData.likes || 0;
+
+                    const userDoc = await getDoc(userDocRef);
+                    let userFavorites = userDoc.exists() ? (userDoc.data().favorites || []) : [];
+
+                    if (userFavorites.includes(currentPlayingVideoId)) {
+                        // Unlike
+                        await updateDoc(videoRef, { likes: currentLikes - 1 });
+                        await updateDoc(userDocRef, { favorites: arrayRemove(currentPlayingVideoId) });
+                        likeButton.classList.remove('liked');
+                        likeCountSpan.textContent = currentLikes - 1;
+                        console.log("Video unliked!");
+                    } else {
+                        // Like
+                        await updateDoc(videoRef, { likes: currentLikes + 1 });
+                        await updateDoc(userDocRef, { favorites: arrayUnion(currentPlayingVideoId) });
+                        likeButton.classList.add('liked');
+                        likeCountSpan.textContent = currentLikes + 1;
+                        triggerHeartAnimation();
+                        console.log("Video liked!");
+                    }
+                    // Re-fetch videos for home/category if needed to reflect updated like counts immediately
+                    // fetchVideos(); 
+                } catch (error) {
+                    console.error("Error updating like status:", error);
                 }
             }
-            resetCategoryForm();
-            fetchAndDisplayAdminCategories();
-            populateCategoryDropdown();
         });
 
-        clearCategoryFormBtn.addEventListener('click', () => {
-            resetCategoryForm();
-            showMessage("Category form cleared.");
+        function triggerHeartAnimation() {
+            heartAnimationContainer.style.display = 'flex';
+            animatedHeart.classList.remove('animate-heart'); // Reset animation
+            void animatedHeart.offsetWidth; // Trigger reflow
+            animatedHeart.classList.add('animate-heart');
+            setTimeout(() => {
+                heartAnimationContainer.style.display = 'none';
+            }, 700); 
+        }
+
+        // Tab switching logic
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+
+                const targetTab = this.dataset.tab;
+
+                homeContent.style.display = 'none';
+                categoriesContent.style.display = 'none';
+                // Add more content sections as needed for other tabs
+
+                if (targetTab === 'home') {
+                    homeContent.style.display = 'block';
+                    fetchVideos(); // Reload all videos for home
+                } else if (targetTab === 'categories') {
+                    categoriesContent.style.display = 'block';
+                    fetchCategories(); // Reload categories
+                } else if (targetTab === 'favourite') {
+                    homeContent.style.display = 'block'; // Display favourites in video grid area
+                    const user = auth.currentUser;
+                    if (user) {
+                        fetchUserFavorites(user.uid);
+                    } else {
+                        displayNoFavoritesMessage("Please log in to see your favourites.");
+                    }
+                } else if (targetTab === 'premium') {
+                     homeContent.style.display = 'block'; // Display premium videos in video grid area
+                     fetchPremiumVideos();
+                }
+            });
         });
 
-        cancelCategoryEditBtn.addEventListener('click', () => {
-            resetCategoryForm();
-            showMessage("Category edit cancelled.");
+        // Search functionality
+        searchToggleBtn.addEventListener('click', () => {
+            searchInput.classList.toggle('active');
+            if (searchInput.classList.contains('active')) {
+                searchInput.focus();
+            } else {
+                searchInput.value = ''; // Clear search on collapse
+                if (searchResultsOverlay.style.display === 'flex') {
+                    searchResultsOverlay.style.display = 'none';
+                    fetchVideos(); // Reload all videos when search is closed
+                    fetchCategories(); // Reload all categories
+                }
+            }
         });
 
-        async function fetchAndDisplayAdminCategories() {
-            adminCategoryList.innerHTML = '';
-            noAdminCategoriesMessage.style.display = 'none';
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                performSearch(searchInput.value);
+            }
+        });
+
+        async function performSearch(searchTerm) {
+            searchTerm = searchTerm.toLowerCase().trim();
+            if (!searchTerm) {
+                alert('Please enter a search term.');
+                return;
+            }
+
+            searchResultsOverlay.style.display = 'flex';
+            searchVideoResults.innerHTML = '';
+            searchCategoryResults.innerHTML = '';
+            noSearchResults.style.display = 'none';
+
+            let videosFound = 0;
+            let categoriesFound = 0;
+
+            // Search videos
+            try {
+                const videosQuery = query(collection(db, 'videos'), 
+                    orderBy('title'), 
+                    orderBy('views', 'desc') // Example secondary order
+                );
+                const videoSnapshot = await getDocs(videosQuery);
+                videoSnapshot.forEach((doc) => {
+                    const video = doc.data();
+                    const videoId = doc.id;
+                    if (video.title.toLowerCase().includes(searchTerm) || video.description.toLowerCase().includes(searchTerm) || video.category.toLowerCase().includes(searchTerm)) {
+                        const videoCard = document.createElement('div');
+                        videoCard.classList.add('video-card');
+                        videoCard.innerHTML = `
+                            <div class="video-thumb">
+                                <img src="${video.thumbnailUrl}" alt="${video.title}">
+                                <span class="video-duration">${video.duration}</span>
+                                <div class="play-btn"><i class="fas fa-play"></i></div>
+                            </div>
+                            <div class="video-info">
+                                <h3>${video.title}</h3>
+                                <div class="video-meta">
+                                    <span class="video-views"><i class="fas fa-eye"></i> ${video.views || 0}</span>
+                                    <span class="video-likes"><i class="fas fa-heart"></i> ${video.likes || 0}</span>
+                                </div>
+                            </div>
+                        `;
+                        videoCard.addEventListener('click', () => {
+                            openVideoModal(videoId, video);
+                        });
+                        searchVideoResults.appendChild(videoCard);
+                        videosFound++;
+                    }
+                });
+            } catch (error) {
+                console.error("Error searching videos:", error);
+            }
+
+            // Search categories
+            try {
+                const categoriesQuery = query(collection(db, 'categories'), orderBy('name'));
+                const categorySnapshot = await getDocs(categoriesQuery);
+                categorySnapshot.forEach((doc) => {
+                    const category = doc.data();
+                    if (category.name.toLowerCase().includes(searchTerm)) {
+                        const categoryCard = document.createElement('div');
+                        categoryCard.classList.add('category-card');
+                        categoryCard.innerHTML = `
+                            <img src="${category.imageUrl || 'https://via.placeholder.com/250x150?text=No+Image'}" alt="${category.name}" class="category-image">
+                            <div class="category-name">${category.name}</div>
+                        `;
+                        categoryCard.addEventListener('click', () => {
+                            filterVideosByCategory(category.name);
+                            searchResultsOverlay.style.display = 'none'; // Close search results after filtering
+                            // Also switch to home tab if on categories tab
+                            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                            document.querySelector('.tab[data-tab="home"]').classList.add('active');
+                        });
+                        searchCategoryResults.appendChild(categoryCard);
+                        categoriesFound++;
+                    }
+                });
+            } catch (error) {
+                console.error("Error searching categories:", error);
+            }
+
+            if (videosFound === 0 && categoriesFound === 0) {
+                noSearchResults.style.display = 'block';
+            }
+        }
+
+        closeSearchResultsBtn.addEventListener('click', () => {
+            searchResultsOverlay.style.display = 'none';
+            searchInput.value = '';
+            searchInput.classList.remove('active');
+            fetchVideos(); // Refresh home videos when closing search
+            fetchCategories(); // Refresh categories when closing search
+        });
+
+        function filterVideosByCategory(categoryName) {
+            fetchVideos(categoryName);
+            // Switch to home tab and hide categories section
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelector('.tab[data-tab="home"]').classList.add('active');
+            categoriesContent.style.display = 'none';
+            homeContent.style.display = 'block';
+        }
+
+        async function fetchUserFavorites(uid) {
+            loadingVideos.style.display = 'flex';
+            noVideos.style.display = 'none';
+            dynamicVideoGrid.innerHTML = '';
+            document.getElementById('video-section-title').textContent = 'Your Favourites';
 
             try {
-                const categoriesRef = collection(db, 'categories');
-                const querySnapshot = await getDocs(categoriesRef);
-                
-                if (querySnapshot.empty) {
-                    noAdminCategoriesMessage.style.display = 'block';
+                const userDocRef = doc(db, 'users', uid);
+                const userDocSnap = await getDoc(userDocRef);
+
+                if (!userDocSnap.exists() || !userDocSnap.data().favorites || userDocSnap.data().favorites.length === 0) {
+                    displayNoFavoritesMessage("You haven't favourited any videos yet.");
                     return;
                 }
 
-                let categories = [];
-                querySnapshot.forEach((doc) => {
-                    categories.push({ id: doc.id, ...doc.data() }); // Include full data for potential future use
-                });
+                const favoriteVideoIds = userDocSnap.data().favorites;
+                const favoriteVideos = [];
 
-                categories.sort((a, b) => a.name.localeCompare(b.name));
+                // Fetch each favorite video by ID
+                for (const videoId of favoriteVideoIds) {
+                    const videoRef = doc(db, 'videos', videoId);
+                    const videoSnap = await getDoc(videoRef);
+                    if (videoSnap.exists()) {
+                        favoriteVideos.push({ id: videoSnap.id, ...videoSnap.data() });
+                    }
+                }
+                
+                // Sort favorite videos to show pinned first
+                favoriteVideos.sort((a, b) => (b.isPinned || false) - (a.isPinned || false));
 
-                // Display categories in the "Manage Existing Categories" section
-                categories.forEach((category) => {
-                    const categoryItem = document.createElement('div');
-                    categoryItem.classList.add('category-item');
-                    categoryItem.setAttribute('data-category-id', category.id);
-                    categoryItem.innerHTML = `
-                        <img src="${category.thumbnail}" alt="Category Thumbnail" onerror="this.onerror=null; this.src='https://placehold.co/80x50/0f0c1d/ffffff?text=No+Image'">
-                        <div class="category-details">
-                            <h3>${category.name}</h3>
+
+                if (favoriteVideos.length === 0) {
+                    displayNoFavoritesMessage("You haven't favourited any videos yet.");
+                    return;
+                }
+
+                favoriteVideos.forEach((video) => {
+                    const videoCard = document.createElement('div');
+                    videoCard.classList.add('video-card');
+                    videoCard.innerHTML = `
+                        <div class="video-thumb">
+                            <img src="${video.thumbnailUrl}" alt="${video.title}">
+                            <span class="video-duration">${video.duration}</span>
+                            <div class="play-btn"><i class="fas fa-play"></i></div>
                         </div>
-                        <div class="action-buttons">
-                            <button class="edit-btn" data-id="${category.id}" data-name="${category.name}" data-thumbnail="${category.thumbnail}"><i class="fas fa-edit"></i> Edit</button>
-                            <button class="delete-btn" data-id="${category.id}"><i class="fas fa-trash"></i> Delete</button>
+                        <div class="video-info">
+                            <h3>${video.title}</h3>
+                            <div class="video-meta">
+                                <span class="video-views"><i class="fas fa-eye"></i> ${video.views || 0}</span>
+                                <span class="video-likes"><i class="fas fa-heart"></i> ${video.likes || 0}</span>
+                            </div>
                         </div>
                     `;
-                    adminCategoryList.appendChild(categoryItem);
-                });
-
-                adminCategoryList.querySelectorAll('.delete-btn').forEach(button => {
-                    button.addEventListener('click', (e) => {
-                        const categoryIdToDelete = e.currentTarget.getAttribute('data-id');
-                        showCustomPrompt(`Are you sure you want to delete "${e.currentTarget.closest('.category-item').querySelector('h3').textContent}"? This action cannot be undone.`, (response) => {
-                            if (response) {
-                                deleteCategory(categoryIdToDelete);
-                            }
-                        });
+                    videoCard.addEventListener('click', () => {
+                        openVideoModal(video.id, video);
                     });
+                    dynamicVideoGrid.appendChild(videoCard);
                 });
-
-                adminCategoryList.querySelectorAll('.edit-btn').forEach(button => {
-                    button.addEventListener('click', (e) => {
-                        editingCategoryId = e.currentTarget.getAttribute('data-id');
-                        document.getElementById('categoryName').value = e.currentTarget.getAttribute('data-name');
-                        document.getElementById('categoryThumbnailUrl').value = e.currentTarget.getAttribute('data-thumbnail');
-                        
-                        categoryFormTitle.textContent = 'Edit Category';
-                        categorySubmitBtn.innerHTML = '<i class="fas fa-save"></i> Update Category';
-                        cancelCategoryEditBtn.style.display = 'inline-block';
-                        showMessage("Editing category: " + e.currentTarget.getAttribute('data-name'));
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                    });
-                });
-
+                loadingVideos.style.display = 'none';
             } catch (error) {
-                console.error("Error fetching admin categories: ", error);
-                adminCategoryList.innerHTML = `
-                    <div class="no-categories-message" style="color: #dc3545;">
-                        <i class="fas fa-exclamation-circle"></i> Error loading categories.
-                    </div>
-                `;
+                console.error("Error fetching user favorites:", error);
+                displayNoFavoritesMessage("Error loading favourites. Please try again.");
             }
         }
 
-        async function deleteCategory(categoryId) {
-            try {
-                await deleteDoc(doc(db, "categories", categoryId));
-                showMessage("Category deleted successfully!");
-                console.log("Category successfully deleted with ID:", categoryId);
-                fetchAndDisplayAdminCategories();
-                populateCategoryDropdown(); // Re-populate dropdown after deletion
-            } catch (error) {
-                console.error("Error deleting category: ", error);
-                showMessage("Error deleting category: " + error.message, 'error');
-            }
+        function displayNoFavoritesMessage(message) {
+            loadingVideos.style.display = 'none';
+            noVideos.style.display = 'flex';
+            noVideos.querySelector('h3').textContent = message;
+            noVideos.querySelector('p').textContent = ''; // Clear sub-message
+            dynamicVideoGrid.innerHTML = ''; // Ensure grid is empty
         }
 
-        async function populateCategoryDropdown() {
-            videoCategorySelect.innerHTML = '<option value="">-- Select a Category --</option>'; // Clear existing options
+        async function fetchPremiumVideos() {
+            loadingVideos.style.display = 'flex';
+            noVideos.style.display = 'none';
+            dynamicVideoGrid.innerHTML = '';
+            document.getElementById('video-section-title').textContent = 'Premium Videos';
+
             try {
-                const categoriesRef = collection(db, 'categories');
-                const querySnapshot = await getDocs(categoriesRef);
-                
-                let categories = [];
+                // Fetch videos where isPremium is true, sorted by isPinned then timestamp
+                const q = query(collection(db, 'videos'), where('isPremium', '==', true), orderBy('isPinned', 'desc'), orderBy('timestamp', 'desc'));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    loadingVideos.style.display = 'none';
+                    noVideos.style.display = 'flex';
+                    noVideos.querySelector('h3').textContent = 'No premium videos available yet.';
+                    noVideos.querySelector('p').textContent = 'Check back later for exclusive content!';
+                    return;
+                }
+
                 querySnapshot.forEach((doc) => {
-                    categories.push({ id: doc.id, name: doc.data().name });
+                    const video = doc.data();
+                    const videoId = doc.id;
+                    const videoCard = document.createElement('div');
+                    videoCard.classList.add('video-card');
+                    videoCard.innerHTML = `
+                        <div class="video-thumb">
+                            <img src="${video.thumbnailUrl}" alt="${video.title}">
+                            <span class="video-duration">${video.duration}</span>
+                            <div class="play-btn"><i class="fas fa-play"></i></div>
+                        </div>
+                        <div class="video-info">
+                            <h3>${video.title}</h3>
+                            <div class="video-meta">
+                                <span class="video-views"><i class="fas fa-eye"></i> ${video.views || 0}</span>
+                                <span class="video-likes"><i class="fas fa-heart"></i> ${video.likes || 0}</span>
+                            </div>
+                        </div>
+                    `;
+                    videoCard.addEventListener('click', () => {
+                        openVideoModal(videoId, video);
+                    });
+                    dynamicVideoGrid.appendChild(videoCard);
                 });
-                categories.sort((a, b) => a.name.localeCompare(b.name));
-
-                categories.forEach(category => {
-                    const option = document.createElement('option');
-                    option.value = category.name.toLowerCase();
-                    option.textContent = category.name;
-                    videoCategorySelect.appendChild(option);
-                });
+                loadingVideos.style.display = 'none';
             } catch (error) {
-                console.error("Error populating categories dropdown: ", error);
-                showMessage("Error loading categories for dropdown.", 'error');
+                console.error("Error fetching premium videos: ", error);
+                loadingVideos.style.display = 'none';
+                noVideos.style.display = 'flex';
+                noVideos.querySelector('h3').textContent = 'Error loading premium videos.';
+                noVideos.querySelector('p').textContent = 'Please try again later.';
             }
         }
+
+
+        // Profile dropdown logic
+        const profileBtn = document.getElementById('profile-btn');
+        const dropdown = document.querySelector('.dropdown');
+        const googleLoginBtn = document.getElementById('google-login');
+        const guestLoginBtn = document.getElementById('guest-login');
+        const logoutBtn = document.getElementById('logout-button');
+        const currentUserNameSpan = document.getElementById('current-user-name');
+        const userDisplayInfo = document.getElementById('user-display-info');
+        const profileIconElement = document.getElementById('profile-icon');
+        const profileBtnElement = document.getElementById('profile-btn');
+
+        profileBtn.addEventListener('click', () => {
+            dropdown.classList.toggle('active');
+        });
+
+        // Close dropdown if clicked outside
+        window.addEventListener('click', (e) => {
+            if (!profileBtn.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.classList.remove('active');
+            }
+        });
+
+        googleLoginBtn.addEventListener('click', async () => {
+            const provider = new GoogleAuthProvider();
+            try {
+                await signInWithPopup(auth, provider);
+                dropdown.classList.remove('active');
+            } catch (error) {
+                console.error("Google Sign-in Error:", error);
+                alert("Failed to sign in with Google: " + error.message);
+            }
+        });
+
+        guestLoginBtn.addEventListener('click', async () => {
+            try {
+                await signInAnonymously(auth);
+                dropdown.classList.remove('active');
+            } catch (error) {
+                console.error("Guest Sign-in Error:", error);
+                alert("Failed to sign in as guest: " + error.message);
+            }
+        });
+
+        logoutBtn.addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                dropdown.classList.remove('active');
+                console.log("User signed out.");
+            } catch (error) {
+                console.error("Logout Error:", error);
+                alert("Failed to log out: " + error.message);
+            }
+        });
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                console.log("User is signed in:", user.uid);
+                if (user.photoURL) {
+                    profileBtnElement.style.backgroundImage = `url(${user.photoURL})`;
+                    profileIconElement.style.display = 'none';
+                } else {
+                    profileBtnElement.style.backgroundImage = 'none';
+                    profileIconElement.style.display = 'block';
+                }
+
+                if (user.isAnonymous) {
+                    currentUserNameSpan.textContent = `Guest User (${user.uid.substring(0, 8)}...)`;
+                    googleLoginBtn.style.display = 'flex';
+                    guestLoginBtn.style.display = 'none';
+                } else {
+                    currentUserNameSpan.textContent = user.displayName || user.email;
+                    googleLoginBtn.style.display = 'none';
+                    guestLoginBtn.style.display = 'none';
+                }
+                userDisplayInfo.style.display = 'flex';
+                logoutBtn.style.display = 'flex';
+                
+                if (document.querySelector('.tab[data-tab="favourite"]').classList.contains('active')) {
+                    fetchUserFavorites(user.uid);
+                }
+            } else {
+                console.log("User is signed out.");
+
+                profileBtnElement.style.backgroundImage = 'none';
+                profileIconElement.style.display = 'block';
+                currentUserNameSpan.textContent = '';
+                userDisplayInfo.style.display = 'none';
+
+                googleLoginBtn.style.display = 'flex';
+                guestLoginBtn.style.display = 'flex';
+                logoutBtn.style.display = 'none';
+                
+                if (document.querySelector('.tab[data-tab="favourite"]').classList.contains('active')) {
+                    displayNoFavoritesMessage("Please log in to see your favourites.");
+                }
+            }
+        });
+
     </script>
 </body>
 </html>
